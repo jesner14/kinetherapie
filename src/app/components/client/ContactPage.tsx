@@ -39,7 +39,7 @@ export function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="py-20 bg-gradient-to-r from-slate-700 via-slate-600 to-emerald-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-black mb-5">{c("contact.hero.title")}</h1>
           <p className="text-slate-100 text-base md:text-xl max-w-3xl mx-auto">{c("contact.hero.text")}</p>
@@ -53,7 +53,7 @@ export function ContactPage() {
               <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-7">Envoyez-nous un message</h2>
 
               {submitted && (
-                <div className="mb-6 rounded-xl border border-green-200 bg-green-50 text-green-700 px-4 py-3 text-sm">
+                <div className="mb-6 rounded-xl border border-brand-200 bg-brand-50 text-brand-700 px-4 py-3 text-sm">
                   Merci, votre message a ete envoye. Nous vous repondrons rapidement.
                 </div>
               )}
@@ -67,7 +67,7 @@ export function ContactPage() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none"
                       placeholder="Jean Dupont"
                     />
                   </div>
@@ -78,7 +78,7 @@ export function ContactPage() {
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none"
                       placeholder="06 12 34 56 78"
                     />
                   </div>
@@ -91,7 +91,7 @@ export function ContactPage() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none"
                     placeholder="jean.dupont@email.com"
                   />
                 </div>
@@ -103,14 +103,14 @@ export function ContactPage() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={6}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none resize-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none resize-none"
                     placeholder="Decrivez votre besoin..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all text-sm font-semibold"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-600 text-white px-6 py-3 rounded-xl hover:from-brand-700 hover:to-brand-700 transition-all text-sm font-semibold"
                 >
                   <Send size={16} /> Envoyer
                 </button>
@@ -144,7 +144,7 @@ export function ContactPage() {
                 return (
                   <div key={item.title} className="bg-gray-50 border border-gray-100 rounded-2xl p-5">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-green-100 text-green-700 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center">
                         <Icon size={18} />
                       </div>
                       <h3 className="text-base font-bold text-gray-900">{item.title}</h3>

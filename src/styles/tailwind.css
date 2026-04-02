@@ -2,3 +2,29 @@
 @source '../**/*.{js,ts,jsx,tsx}';
 
 @import 'tw-animate-css';
+
+@theme {
+  /* Bleu principal #04a2e8 */
+  --color-brand-50:  #e6f6fd;
+  --color-brand-100: #b0e1f8;
+  --color-brand-200: #7acef3;
+  --color-brand-300: #44baee;
+  --color-brand-400: #1faae9;
+  --color-brand-500: #04a2e8;
+  --color-brand-600: #0382ba;
+  --color-brand-700: #02618c;
+  --color-brand-800: #01415e;
+  --color-brand-900: #012030;
+
+  /* Turquoise #06c8c3 */
+  --color-teal-50:  #e0faf9;
+  --color-teal-100: #a8f2f1;
+  --color-teal-200: #6feaea;
+  --color-teal-300: #36e1e0;
+  --color-teal-400: #1dd4d3;
+  --color-teal-500: #06c8c3;
+  --color-teal-600: #059f9b;
+  --color-teal-700: #047775;
+  --color-teal-800: #024f4e;
+  --color-teal-900: #012727;
+}

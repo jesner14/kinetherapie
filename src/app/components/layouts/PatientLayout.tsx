@@ -27,29 +27,29 @@ export function PatientLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-green-600 text-white shadow-lg">
+      <header className="bg-brand-600 text-white shadow-lg">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                <span className="text-green-600 text-2xl font-bold">K</span>
+                <span className="text-brand-600 text-2xl font-bold">K</span>
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Espace Patient</h1>
-                <p className="text-green-100 text-sm">Kiné Excellence</p>
+                <p className="text-brand-100 text-sm">Kiné Excellence</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
               <Link
                 to="/"
-                className="text-white hover:text-green-100 transition-all"
+                className="text-white hover:text-brand-100 transition-all"
               >
                 Retour au site
               </Link>
               <div className="flex items-center gap-2">
-                <span className="text-green-100">{profile?.full_name ?? ""}</span>
-                <div className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center">
+                <span className="text-brand-100">{profile?.full_name ?? ""}</span>
+                <div className="w-10 h-10 bg-brand-700 rounded-full flex items-center justify-center">
                   <span className="text-white font-bold text-sm">
                     {profile?.full_name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) ?? ""}
                   </span>
@@ -77,8 +77,8 @@ export function PatientLayout() {
                   to={item.path}
                   className={`flex items-center gap-2 px-6 py-3 rounded-lg whitespace-nowrap transition-all ${
                     isActive
-                      ? "bg-green-600 text-white"
-                      : "text-gray-700 hover:bg-green-50 hover:text-green-600"
+                      ? "bg-brand-600 text-white"
+                      : "text-gray-700 hover:bg-brand-50 hover:text-brand-600"
                   }`}
                 >
                   <Icon size={20} />
@@ -96,18 +96,18 @@ export function PatientLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-green-700 text-white mt-20">
+      <footer className="bg-brand-700 text-white mt-20">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-green-100">© 2026 Kiné Excellence</p>
-              <p className="text-green-100 text-sm">
+              <p className="text-brand-100">© 2026 Kiné Excellence</p>
+              <p className="text-brand-100 text-sm">
                 Tous droits réservés
               </p>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 rounded-lg hover:bg-green-800 transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-brand-600 rounded-lg hover:bg-brand-800 transition-all"
             >
               <LogOut size={20} />
               <span>Déconnexion</span>

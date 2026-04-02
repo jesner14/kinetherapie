@@ -34,10 +34,10 @@ export function AdminLayout() {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-green-700 text-white flex flex-col">
-        <div className="p-4 border-b border-green-600">
+      <aside className="w-64 bg-brand-700 text-white flex flex-col">
+        <div className="p-4 border-b border-brand-600">
           <h1 className="text-lg font-bold">Admin Panel</h1>
-          <p className="text-green-200 text-xs mt-0.5">Kiné Excellence</p>
+          <p className="text-brand-200 text-xs mt-0.5">Kiné Excellence</p>
         </div>
 
         <nav className="flex-1 p-4 space-y-2">
@@ -54,8 +54,8 @@ export function AdminLayout() {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   isActive
-                    ? "bg-green-600 text-white"
-                    : "text-green-100 hover:bg-green-600"
+                    ? "bg-brand-600 text-white"
+                    : "text-brand-100 hover:bg-brand-600"
                 }`}
               >
                 <Icon size={20} />
@@ -65,10 +65,10 @@ export function AdminLayout() {
           })}
         </nav>
 
-        <div className="p-4 border-t border-green-600">
+        <div className="p-4 border-t border-brand-600">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg w-full text-green-100 hover:bg-green-600 transition-all"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg w-full text-brand-100 hover:bg-brand-600 transition-all"
           >
             <LogOut size={20} />
             <span>Déconnexion</span>
@@ -85,7 +85,7 @@ export function AdminLayout() {
             </h2>
             <div className="flex items-center gap-4">
               <span className="text-gray-600">{profile?.full_name ?? ""}</span>
-              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-brand-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">
                   {profile?.full_name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) ?? ""}
                 </span>

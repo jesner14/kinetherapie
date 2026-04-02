@@ -32,7 +32,7 @@ export function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
-      <section className="py-20 bg-gradient-to-r from-slate-700 via-slate-600 to-emerald-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-slate-100 bg-white/15 border border-white/25 rounded-full px-3 py-1 mb-4">
             <Sparkles size={14} /> Avant / Apres
@@ -58,17 +58,19 @@ export function GalleryPage() {
               <p className="text-gray-600">Aucune photo pour le moment.</p>
             </div>
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {photos.map((photo) => (
                 <button
                   key={photo.id}
                   onClick={() => setSelected(photo)}
-                  className="break-inside-avoid w-full text-left rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-lg transition-all"
+                  className="text-left rounded-xl overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all"
                 >
-                  <img src={photo.image_base64 ?? ""} alt={photo.title} className="w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
-                  <div className="p-4">
-                    <h3 className="font-bold text-gray-900 mb-1">{photo.title}</h3>
-                    {photo.description && <p className="text-sm text-gray-600">{photo.description}</p>}
+                  <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+                    <img src={photo.image_base64 ?? ""} alt={photo.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
+                  </div>
+                  <div className="p-2">
+                    <h3 className="font-semibold text-gray-900 text-sm truncate">{photo.title}</h3>
+                    {photo.description && <p className="text-xs text-gray-500 truncate">{photo.description}</p>}
                   </div>
                 </button>
               ))}

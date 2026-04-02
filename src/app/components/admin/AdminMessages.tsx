@@ -21,7 +21,7 @@ function Avatar({ name, size = "sm" }: { name: string; size?: "sm" | "md" }) {
   const initials = name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   const s = size === "sm" ? "w-8 h-8 text-xs" : "w-9 h-9 text-sm";
   return (
-    <div className={`${s} rounded-full bg-green-100 text-green-700 font-bold flex items-center justify-center shrink-0`}>
+    <div className={`${s} rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center shrink-0`}>
       {initials}
     </div>
   );
@@ -124,7 +124,7 @@ export function AdminMessages() {
       {/* Page header */}
       <div>
         <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <MessageSquare size={20} className="text-green-600" />
+          <MessageSquare size={20} className="text-brand-600" />
           Messagerie
         </h1>
         <p className="text-xs text-gray-500">Communiquez directement avec vos patients</p>
@@ -141,7 +141,7 @@ export function AdminMessages() {
                 placeholder="Rechercher..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none"
+                className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
               />
             </div>
           </div>
@@ -149,7 +149,7 @@ export function AdminMessages() {
           <div className="flex-1 overflow-y-auto">
             {convsLoading ? (
               <div className="flex justify-center items-center h-full">
-                <Loader2 size={20} className="animate-spin text-green-500" />
+                <Loader2 size={20} className="animate-spin text-brand-500" />
               </div>
             ) : filteredConvs.length === 0 ? (
               <p className="text-xs text-gray-400 text-center p-4">Aucune conversation</p>
@@ -172,13 +172,13 @@ export function AdminMessages() {
                     }}
                     className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors border-b border-gray-100 last:border-0 ${
                       isSelected
-                        ? "bg-green-50 text-green-700"
+                        ? "bg-brand-50 text-brand-700"
                         : "hover:bg-gray-50 text-gray-700"
                     }`}
                   >
                     <Avatar name={patient?.full_name ?? "?"} size="sm" />
                     <div className="min-w-0 flex-1">
-                      <p className={`text-xs font-semibold truncate ${isSelected ? "text-green-700" : "text-gray-800"}`}>
+                      <p className={`text-xs font-semibold truncate ${isSelected ? "text-brand-700" : "text-gray-800"}`}>
                         {patient?.full_name ?? "Patient"}
                       </p>
                       {conv.last_message_at && (
@@ -221,7 +221,7 @@ export function AdminMessages() {
               </div>
             ) : msgsLoading ? (
               <div className="flex justify-center items-center h-full">
-                <Loader2 size={24} className="animate-spin text-green-500" />
+                <Loader2 size={24} className="animate-spin text-brand-500" />
               </div>
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-400">
@@ -238,12 +238,12 @@ export function AdminMessages() {
                     <div
                       className={`max-w-[72%] rounded-2xl px-3 py-2 text-sm shadow-sm ${
                         isMe
-                          ? "bg-green-600 text-white rounded-br-sm"
+                          ? "bg-brand-600 text-white rounded-br-sm"
                           : "bg-white text-gray-800 border border-gray-200 rounded-bl-sm"
                       }`}
                     >
                       <p className="leading-relaxed">{msg.content}</p>
-                      <div className={`flex items-center gap-1 mt-0.5 justify-end text-[10px] ${isMe ? "text-green-200" : "text-gray-400"}`}>
+                      <div className={`flex items-center gap-1 mt-0.5 justify-end text-[10px] ${isMe ? "text-brand-200" : "text-gray-400"}`}>
                         <span>{relativeTime(msg.created_at)}</span>
                         {isMe && (msg.read_at ? <CheckCheck size={12} /> : <Check size={12} />)}
                       </div>
@@ -264,12 +264,12 @@ export function AdminMessages() {
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder={selectedConv ? "Répondre au patient..." : "Sélectionnez une conversation"}
                 disabled={!selectedConv || sending}
-                className="flex-1 text-sm px-3 py-2 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none disabled:bg-gray-50"
+                className="flex-1 text-sm px-3 py-2 border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none disabled:bg-gray-50"
               />
               <button
                 type="submit"
                 disabled={!newMessage.trim() || !selectedConv || sending}
-                className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 bg-brand-600 text-white px-3 py-2 rounded-lg hover:bg-brand-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {sending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                 Envoyer

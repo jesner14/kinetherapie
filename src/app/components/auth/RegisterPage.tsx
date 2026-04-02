@@ -49,10 +49,10 @@ export function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-brand-700 to-teal-600 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 text-center">
-          <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="text-green-600" size={28} />
+          <div className="w-14 h-14 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="text-brand-600" size={28} />
           </div>
           <h2 className="text-lg font-bold text-gray-900 mb-2">Compte créé !</h2>
           <p className="text-sm text-gray-500 mb-6">
@@ -60,7 +60,7 @@ export function RegisterPage() {
           </p>
           <Link
             to="/login"
-            className="block w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2.5 rounded-lg transition-colors text-center"
+            className="block w-full bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium py-2.5 rounded-lg transition-colors text-center"
           >
             Se connecter
           </Link>
@@ -70,11 +70,11 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-brand-700 to-teal-600 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
         {/* Logo */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 bg-brand-600 rounded-full flex items-center justify-center mx-auto mb-3">
             <span className="text-white text-2xl font-bold">K</span>
           </div>
           <h1 className="text-xl font-bold text-gray-900">Kiné Excellence</h1>
@@ -103,7 +103,7 @@ export function RegisterPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Marie Dupont"
                 required
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -121,7 +121,7 @@ export function RegisterPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="marie@email.com"
                 required
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -140,7 +140,7 @@ export function RegisterPage() {
                 placeholder="••••••••"
                 required
                 minLength={6}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -158,7 +158,7 @@ export function RegisterPage() {
                 onChange={(e) => setConfirm(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -166,7 +166,7 @@ export function RegisterPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white text-sm font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2"
+            className="w-full bg-brand-600 hover:bg-brand-700 disabled:bg-brand-400 text-white text-sm font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2"
           >
             {submitting && <Loader2 size={15} className="animate-spin" />}
             {submitting ? "Création en cours..." : "Créer mon compte"}
@@ -175,7 +175,7 @@ export function RegisterPage() {
 
         <p className="mt-4 text-center text-sm text-gray-500">
           Déjà un compte ?{" "}
-          <Link to="/login" className="text-green-600 hover:underline font-medium">
+          <Link to="/login" className="text-brand-600 hover:underline font-medium">
             Se connecter
           </Link>
         </p>

@@ -61,7 +61,7 @@ export function AdminCalendar() {
         {/* Date Selector */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <CalendarIcon className="text-green-600" size={24} />
+            <CalendarIcon className="text-brand-600" size={24} />
             Sélectionner une Date
           </h3>
 
@@ -69,7 +69,7 @@ export function AdminCalendar() {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-600 focus:outline-none mb-6"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-brand-600 focus:outline-none mb-6"
           />
 
           <div className="space-y-2">
@@ -80,7 +80,7 @@ export function AdminCalendar() {
                 onClick={() => setSelectedDate(date)}
                 className={`w-full text-left px-4 py-2 rounded-lg transition-all ${
                   selectedDate === date
-                    ? "bg-green-600 text-white"
+                    ? "bg-brand-600 text-white"
                     : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                 }`}
               >
@@ -117,12 +117,12 @@ export function AdminCalendar() {
                 type="time"
                 value={newSlotTime}
                 onChange={(e) => setNewSlotTime(e.target.value)}
-                className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-600 focus:outline-none"
+                className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-brand-600 focus:outline-none"
                 placeholder="09:00"
               />
               <button
                 type="submit"
-                className="flex items-center gap-2 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all"
+                className="flex items-center gap-2 bg-brand-600 text-white px-6 py-2 rounded-lg hover:bg-brand-700 transition-all"
               >
                 <Plus size={20} />
                 Ajouter
@@ -137,7 +137,7 @@ export function AdminCalendar() {
                 key={slot.id}
                 className={`p-4 rounded-lg border-2 transition-all ${
                   slot.available
-                    ? "border-green-300 bg-green-50"
+                    ? "border-brand-300 bg-brand-50"
                     : "border-red-300 bg-red-50"
                 }`}
               >
@@ -156,7 +156,7 @@ export function AdminCalendar() {
                   onClick={() => handleToggleAvailability(slot.id)}
                   className={`w-full px-4 py-2 rounded-lg font-semibold transition-all ${
                     slot.available
-                      ? "bg-green-600 text-white hover:bg-green-700"
+                      ? "bg-brand-600 text-white hover:bg-brand-700"
                       : "bg-red-600 text-white hover:bg-red-700"
                   }`}
                 >
@@ -174,7 +174,7 @@ export function AdminCalendar() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-600">
+        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-brand-600">
           <div className="text-3xl font-bold text-gray-900 mb-2">
             {timeSlots.filter((s) => s.available).length}
           </div>
@@ -188,7 +188,7 @@ export function AdminCalendar() {
           <div className="text-gray-600">Créneaux Réservés</div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-600">
+        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-brand-600">
           <div className="text-3xl font-bold text-gray-900 mb-2">
             {timeSlots.length}
           </div>

@@ -71,7 +71,7 @@ function EditField({ id, value, type, label, onSave }: EditFieldProps) {
                 <p className="text-white text-xs text-center truncate max-w-full">Image sélectionnée</p>
               )}
               <div className="flex gap-2 mt-1">
-                <button onClick={handleSave} disabled={saving} className="flex items-center gap-1 bg-green-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-green-600 disabled:opacity-60">
+                <button onClick={handleSave} disabled={saving} className="flex items-center gap-1 bg-brand-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-brand-600 disabled:opacity-60">
                   {saving ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />} Sauvegarder
                 </button>
                 <button onClick={() => { setDraft(value); setEditing(false); }} className="flex items-center gap-1 bg-white/20 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-white/30">
@@ -82,7 +82,7 @@ function EditField({ id, value, type, label, onSave }: EditFieldProps) {
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow text-gray-700 hover:text-green-700 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow text-gray-700 hover:text-brand-700 opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Pencil size={14} />
             </button>
@@ -104,7 +104,7 @@ function EditField({ id, value, type, label, onSave }: EditFieldProps) {
                 onChange={(e) => setDraft(e.target.value)}
                 rows={3}
                 autoFocus
-                className="w-full px-3 py-2 border border-green-400 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-200 resize-none"
+                className="w-full px-3 py-2 border border-brand-400 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 resize-none"
               />
             ) : (
               <input
@@ -112,11 +112,11 @@ function EditField({ id, value, type, label, onSave }: EditFieldProps) {
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 autoFocus
-                className="w-full px-3 py-2 border border-green-400 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-200"
+                className="w-full px-3 py-2 border border-brand-400 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-200"
               />
             )}
             <div className="flex gap-2">
-              <button onClick={handleSave} disabled={saving} className="flex items-center gap-1 bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-green-700 disabled:opacity-60">
+              <button onClick={handleSave} disabled={saving} className="flex items-center gap-1 bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-brand-700 disabled:opacity-60">
                 {saving ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />} Sauvegarder
               </button>
               <button onClick={() => { setDraft(value); setEditing(false); }} className="flex items-center gap-1 border border-gray-300 text-gray-600 px-3 py-1.5 rounded-lg text-xs hover:bg-gray-50">
@@ -131,7 +131,7 @@ function EditField({ id, value, type, label, onSave }: EditFieldProps) {
       {!editing && (
         <button
           onClick={() => { setDraft(value); setEditing(true); }}
-          className="mt-5 p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+          className="mt-5 p-1.5 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
           title="Modifier"
         >
           <Pencil size={15} />
@@ -236,20 +236,20 @@ function TeamMemberModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Nom complet *</label>
-              <input required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none" />
+              <input required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Titre *</label>
-              <input required value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Kinésithérapeute D.E." className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none" />
+              <input required value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Kinésithérapeute D.E." className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Spécialité *</label>
-            <input required value={form.specialty} onChange={(e) => setForm((f) => ({ ...f, specialty: e.target.value }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none" />
+            <input required value={form.specialty} onChange={(e) => setForm((f) => ({ ...f, specialty: e.target.value }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Biographie</label>
-            <textarea value={form.bio} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none resize-none" />
+            <textarea value={form.bio} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none resize-none" />
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Photo</label>
@@ -266,17 +266,17 @@ function TeamMemberModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Ordre d'affichage</label>
-              <input type="number" min={0} value={form.order_index} onChange={(e) => setForm((f) => ({ ...f, order_index: Number(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none" />
+              <input type="number" min={0} value={form.order_index} onChange={(e) => setForm((f) => ({ ...f, order_index: Number(e.target.value) }))} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
             </div>
             <div className="flex items-end pb-1">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.is_active} onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))} className="w-4 h-4 accent-green-600" />
+                <input type="checkbox" checked={form.is_active} onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))} className="w-4 h-4 accent-brand-600" />
                 <span className="text-sm text-gray-700">Profil actif</span>
               </label>
             </div>
           </div>
           <div className="flex gap-3 pt-2">
-            <button type="submit" disabled={saving} className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-2.5 rounded-xl font-semibold hover:bg-green-700 disabled:opacity-60">
+            <button type="submit" disabled={saving} className="flex-1 flex items-center justify-center gap-2 bg-brand-600 text-white py-2.5 rounded-xl font-semibold hover:bg-brand-700 disabled:opacity-60">
               {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
               {member ? "Mettre à jour" : "Ajouter"}
             </button>
@@ -365,7 +365,7 @@ export function AdminContent() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                 activeTab === tab.id
-                  ? "bg-white text-green-700 shadow-sm"
+                  ? "bg-white text-brand-700 shadow-sm"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -419,7 +419,7 @@ export function AdminContent() {
               <span className="font-semibold text-gray-800">👥 Membres de l'Équipe</span>
               <button
                 onClick={() => setMemberModal({ open: true, member: null })}
-                className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-green-700"
+                className="flex items-center gap-1.5 bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-brand-700"
               >
                 <Plus size={14} /> Ajouter
               </button>
@@ -429,7 +429,7 @@ export function AdminContent() {
                 <p className="text-sm text-gray-500 italic text-center py-4">Aucun membre — ajoutez-en un.</p>
               )}
               {members.map((member) => (
-                <div key={member.id} className="flex items-center gap-4 p-3 rounded-xl border border-gray-100 hover:border-green-100 hover:bg-green-50/30 transition-all">
+                <div key={member.id} className="flex items-center gap-4 p-3 rounded-xl border border-gray-100 hover:border-brand-100 hover:bg-brand-50/30 transition-all">
                   <img
                     src={member.photo_base64 ?? "https://placehold.co/80x80?text=?"}
                     alt={member.name}
@@ -443,7 +443,7 @@ export function AdminContent() {
                   <div className="flex gap-1.5">
                     <button
                       onClick={() => setMemberModal({ open: true, member })}
-                      className="p-1.5 rounded-lg text-gray-500 hover:text-green-700 hover:bg-green-50"
+                      className="p-1.5 rounded-lg text-gray-500 hover:text-brand-700 hover:bg-brand-50"
                       title="Modifier"
                     >
                       <Pencil size={15} />

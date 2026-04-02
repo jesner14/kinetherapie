@@ -115,7 +115,7 @@ export function AdminGallery() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <ImagePlus size={18} className="text-green-600" /> Ajouter une photo
+          <ImagePlus size={18} className="text-brand-600" /> Ajouter une photo
         </h2>
 
         <form onSubmit={handleAddPhoto} className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -126,7 +126,7 @@ export function AdminGallery() {
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
               placeholder="Avant / après lombalgie"
             />
           </div>
@@ -137,7 +137,7 @@ export function AdminGallery() {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 hover:border-green-400 text-gray-600 hover:text-green-700 px-3 py-2 rounded-lg text-sm transition-colors"
+              className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 hover:border-brand-400 text-gray-600 hover:text-brand-700 px-3 py-2 rounded-lg text-sm transition-colors"
             >
               <Upload size={15} />
               {form.image_base64 ? "Image sélectionnée ✓" : "Choisir un fichier"}
@@ -156,7 +156,7 @@ export function AdminGallery() {
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none resize-none"
               placeholder="Description courte de la réalisation"
             />
           </div>
@@ -167,7 +167,7 @@ export function AdminGallery() {
                 type="checkbox"
                 checked={form.isPublished}
                 onChange={(e) => setForm({ ...form, isPublished: e.target.checked })}
-                className="rounded border-gray-300 accent-green-600"
+                className="rounded border-gray-300 accent-brand-600"
               />
               Publiée sur le site
             </label>
@@ -175,7 +175,7 @@ export function AdminGallery() {
             <button
               type="submit"
               disabled={submitting || !form.image_base64}
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 disabled:bg-brand-400 text-white px-4 py-2 rounded-lg text-sm font-medium"
             >
               {submitting && <Loader2 size={14} className="animate-spin" />} Ajouter
             </button>
@@ -203,7 +203,7 @@ export function AdminGallery() {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className="font-semibold text-gray-900 text-sm">{photo.title}</h3>
-                    <span className={`text-[10px] px-2 py-1 rounded-full ${photo.is_published ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
+                    <span className={`text-[10px] px-2 py-1 rounded-full ${photo.is_published ? "bg-brand-100 text-brand-700" : "bg-gray-100 text-gray-600"}`}>
                       {photo.is_published ? "Publiée" : "Brouillon"}
                     </span>
                   </div>

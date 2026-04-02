@@ -25,14 +25,14 @@ export function AdminReviews() {
           <div className="text-gray-600">Note Moyenne</div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-600">
+        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-brand-600">
           <div className="text-3xl font-bold text-gray-900 mb-2">
             {mockReviews.length}
           </div>
           <div className="text-gray-600">Total Avis</div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-600">
+        <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-brand-600">
           <div className="text-3xl font-bold text-gray-900 mb-2">
             {mockReviews.filter((r) => r.rating === 5).length}
           </div>
@@ -57,7 +57,7 @@ export function AdminReviews() {
           {mockReviews.map((review) => (
             <div
               key={review.id}
-              className="border-2 border-gray-200 rounded-lg p-6 hover:border-green-300 transition-all"
+              className="border-2 border-gray-200 rounded-lg p-6 hover:border-brand-300 transition-all"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -87,7 +87,7 @@ export function AdminReviews() {
                 </div>
 
                 <div className="flex gap-2">
-                  <button className="flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition-all">
+                  <button className="flex items-center gap-2 bg-brand-100 text-brand-700 px-4 py-2 rounded-lg hover:bg-brand-200 transition-all">
                     <CheckCircle size={18} />
                     Approuver
                   </button>
@@ -125,7 +125,7 @@ export function AdminReviews() {
                 </div>
                 <div className="flex-1 bg-gray-200 rounded-full h-4 overflow-hidden">
                   <div
-                    className="bg-green-600 h-full rounded-full"
+                    className="bg-brand-600 h-full rounded-full"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>

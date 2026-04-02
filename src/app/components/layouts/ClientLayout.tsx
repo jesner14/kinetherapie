@@ -31,12 +31,12 @@ export function ClientLayout() {
         <div className="max-w-6xl mx-auto px-6 py-3.5">
           <div className="flex justify-between items-center">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-green-200 transition-shadow">
+              <div className="w-10 h-10 bg-gradient-to-br from-brand-500 to-teal-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-brand-200 transition-shadow">
                 <span className="text-white text-lg font-black">K</span>
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900 leading-tight">Kiné Excellence</h1>
-                <p className="text-[10px] text-green-600 font-medium tracking-wide uppercase">Cabinet de Kinésithérapie</p>
+                <p className="text-[10px] text-brand-600 font-medium tracking-wide uppercase">Cabinet de Kinésithérapie</p>
               </div>
             </Link>
 
@@ -49,8 +49,8 @@ export function ClientLayout() {
                     to={item.path}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-green-600 text-white shadow-sm"
-                        : "text-gray-600 hover:text-green-700 hover:bg-green-50"
+                        ? "bg-brand-600 text-white shadow-sm"
+                        : "text-gray-600 hover:text-brand-700 hover:bg-brand-50"
                     }`}
                   >
                     {item.label}
@@ -62,13 +62,13 @@ export function ClientLayout() {
             <div className="hidden md:flex items-center gap-2">
               <Link
                 to="/login?role=patient"
-                className="px-4 py-2 text-sm font-semibold text-green-700 border border-green-200 rounded-lg hover:bg-green-50 transition-all"
+                className="px-4 py-2 text-sm font-semibold text-brand-700 border border-brand-200 rounded-lg hover:bg-brand-50 transition-all"
               >
                 Espace Patient
               </Link>
               <Link
                 to="/login?role=admin"
-                className="px-4 py-2 text-sm font-semibold bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-sm transition-all"
+                className="px-4 py-2 text-sm font-semibold bg-brand-600 text-white rounded-lg hover:bg-brand-700 shadow-sm transition-all"
               >
                 Connexion
               </Link>
@@ -90,7 +90,7 @@ export function ClientLayout() {
                     key={item.path}
                     to={item.path}
                     className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      isActive ? "bg-green-600 text-white" : "text-gray-700 hover:bg-gray-50"
+                      isActive ? "bg-brand-600 text-white" : "text-gray-700 hover:bg-gray-50"
                     }`}
                   >
                     {item.label}
@@ -98,8 +98,8 @@ export function ClientLayout() {
                 );
               })}
               <div className="flex gap-2 mt-2 pt-2 border-t border-gray-100">
-                <Link to="/login?role=patient" className="flex-1 text-center py-2 text-sm font-semibold text-green-700 border border-green-200 rounded-lg">Espace Patient</Link>
-                <Link to="/login?role=admin" className="flex-1 text-center py-2 text-sm font-semibold bg-green-600 text-white rounded-lg">Connexion</Link>
+                <Link to="/login?role=patient" className="flex-1 text-center py-2 text-sm font-semibold text-brand-700 border border-brand-200 rounded-lg">Espace Patient</Link>
+                <Link to="/login?role=admin" className="flex-1 text-center py-2 text-sm font-semibold bg-brand-600 text-white rounded-lg">Connexion</Link>
               </div>
             </nav>
           )}
@@ -112,12 +112,12 @@ export function ClientLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 text-white mt-20 border-t-2 border-green-500/20">
+      <footer className="bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 text-white mt-20 border-t-2 border-brand-500/20">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-brand-500 to-teal-500 rounded-xl flex items-center justify-center">
                   <span className="text-white font-black">K</span>
                 </div>
                 <span className="text-lg font-bold">Kiné Excellence</span>
@@ -146,9 +146,9 @@ export function ClientLayout() {
           <div className="border-t border-slate-500/50 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-200/75">
             <p>© 2026 Kiné Excellence. Tous droits réservés.</p>
             <div className="flex gap-4">
-              <Link to="/about" className="hover:text-green-400 transition-colors">À propos</Link>
-              <Link to="/contact" className="hover:text-green-400 transition-colors">Contact</Link>
-              <Link to="/login?role=patient" className="hover:text-green-400 transition-colors">Espace Patient</Link>
+              <Link to="/about" className="hover:text-brand-400 transition-colors">À propos</Link>
+              <Link to="/contact" className="hover:text-brand-400 transition-colors">Contact</Link>
+              <Link to="/login?role=patient" className="hover:text-brand-400 transition-colors">Espace Patient</Link>
             </div>
           </div>
         </div>

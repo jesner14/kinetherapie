@@ -32,7 +32,7 @@ export function PatientBooking() {
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-lg p-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-          <CalendarIcon className="text-green-600" size={36} />
+          <CalendarIcon className="text-brand-600" size={36} />
           Réserver un Rendez-vous
         </h1>
         <p className="text-gray-600 text-lg">
@@ -41,14 +41,14 @@ export function PatientBooking() {
       </div>
 
       {showConfirmation && (
-        <div className="bg-green-100 border-l-4 border-green-600 p-6 rounded-lg">
+        <div className="bg-brand-100 border-l-4 border-brand-600 p-6 rounded-lg">
           <div className="flex items-center gap-3">
-            <CheckCircle className="text-green-600" size={32} />
+            <CheckCircle className="text-brand-600" size={32} />
             <div>
-              <p className="text-green-700 font-bold text-lg">
+              <p className="text-brand-700 font-bold text-lg">
                 Réservation Confirmée !
               </p>
-              <p className="text-green-600">
+              <p className="text-brand-600">
                 Vous recevrez une confirmation par email.
               </p>
             </div>
@@ -60,7 +60,7 @@ export function PatientBooking() {
         {/* Calendar - Date Selection */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <CalendarIcon className="text-green-600" size={24} />
+            <CalendarIcon className="text-brand-600" size={24} />
             Sélectionner une Date
           </h3>
 
@@ -76,8 +76,8 @@ export function PatientBooking() {
                   }}
                   className={`w-full text-left p-4 rounded-lg transition-all border-2 ${
                     selectedDate === date
-                      ? "bg-green-600 text-white border-green-600"
-                      : "bg-white border-gray-200 hover:border-green-300 text-gray-700"
+                      ? "bg-brand-600 text-white border-brand-600"
+                      : "bg-white border-gray-200 hover:border-brand-300 text-gray-700"
                   }`}
                 >
                   <p className="font-bold">
@@ -89,7 +89,7 @@ export function PatientBooking() {
                   </p>
                   <p
                     className={`text-sm ${
-                      selectedDate === date ? "text-green-100" : "text-gray-500"
+                      selectedDate === date ? "text-brand-100" : "text-gray-500"
                     }`}
                   >
                     {slotsCount} créneau{slotsCount > 1 ? "x" : ""} disponible
@@ -106,7 +106,7 @@ export function PatientBooking() {
           {selectedDate ? (
             <>
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Clock className="text-green-600" size={24} />
+                <Clock className="text-brand-600" size={24} />
                 Créneaux Disponibles pour le{" "}
                 {new Date(selectedDate).toLocaleDateString("fr-FR", {
                   day: "numeric",
@@ -124,8 +124,8 @@ export function PatientBooking() {
                       onClick={() => setSelectedSlot(slot.id)}
                       className={`p-6 rounded-lg border-2 transition-all ${
                         selectedSlot === slot.id
-                          ? "bg-green-600 text-white border-green-600 scale-105"
-                          : "bg-white border-gray-200 hover:border-green-300 text-gray-700"
+                          ? "bg-brand-600 text-white border-brand-600 scale-105"
+                          : "bg-white border-gray-200 hover:border-brand-300 text-gray-700"
                       }`}
                     >
                       <Clock
@@ -133,7 +133,7 @@ export function PatientBooking() {
                         className={`mx-auto mb-2 ${
                           selectedSlot === slot.id
                             ? "text-white"
-                            : "text-green-600"
+                            : "text-brand-600"
                         }`}
                       />
                       <p className="text-2xl font-bold">{slot.time}</p>
@@ -142,7 +142,7 @@ export function PatientBooking() {
               </div>
 
               {selectedSlot && (
-                <div className="bg-green-50 border-2 border-green-300 rounded-lg p-6">
+                <div className="bg-brand-50 border-2 border-brand-300 rounded-lg p-6">
                   <h4 className="font-bold text-gray-900 text-lg mb-4">
                     Récapitulatif de votre réservation
                   </h4>
@@ -170,7 +170,7 @@ export function PatientBooking() {
                   </div>
                   <button
                     onClick={handleBooking}
-                    className="w-full bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 transition-all text-lg font-bold"
+                    className="w-full bg-brand-600 text-white px-6 py-4 rounded-lg hover:bg-brand-700 transition-all text-lg font-bold"
                   >
                     Confirmer la Réservation
                   </button>
@@ -189,31 +189,31 @@ export function PatientBooking() {
       </div>
 
       {/* Information Section */}
-      <div className="bg-blue-50 border-2 border-blue-300 rounded-xl shadow-lg p-6">
+      <div className="bg-brand-50 border-2 border-brand-300 rounded-xl shadow-lg p-6">
         <h3 className="text-xl font-bold text-gray-900 mb-4">
           Informations Importantes
         </h3>
         <ul className="space-y-2 text-gray-700">
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-blue-600 flex-shrink-0 mt-1" size={20} />
+            <CheckCircle className="text-brand-600 flex-shrink-0 mt-1" size={20} />
             <span>
               Vous recevrez une confirmation par email et SMS
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-blue-600 flex-shrink-0 mt-1" size={20} />
+            <CheckCircle className="text-brand-600 flex-shrink-0 mt-1" size={20} />
             <span>
               Veuillez arriver 5 minutes avant l'heure de votre rendez-vous
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-blue-600 flex-shrink-0 mt-1" size={20} />
+            <CheckCircle className="text-brand-600 flex-shrink-0 mt-1" size={20} />
             <span>
               Pour annuler ou modifier, contactez-nous au moins 24h à l'avance
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-blue-600 flex-shrink-0 mt-1" size={20} />
+            <CheckCircle className="text-brand-600 flex-shrink-0 mt-1" size={20} />
             <span>
               N'oubliez pas d'apporter votre carte vitale et votre ordonnance
             </span>

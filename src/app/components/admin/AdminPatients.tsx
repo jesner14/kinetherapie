@@ -107,7 +107,7 @@ export function AdminPatients() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all"
+          className="flex items-center gap-2 bg-brand-600 text-white px-6 py-3 rounded-lg hover:bg-brand-700 transition-all"
         >
           <Plus size={20} />
           Créer un Patient
@@ -123,7 +123,7 @@ export function AdminPatients() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Rechercher un patient..."
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-600 focus:outline-none"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-brand-600 focus:outline-none"
           />
         </div>
       </div>
@@ -144,7 +144,7 @@ export function AdminPatients() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-green-600 text-white">
+              <thead className="bg-brand-600 text-white">
                 <tr>
                   <th className="px-6 py-4 text-left">Nom</th>
                   <th className="px-6 py-4 text-left">Membre depuis</th>
@@ -156,7 +156,7 @@ export function AdminPatients() {
                   <tr key={patient.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-green-100 text-green-700 font-bold text-sm flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-brand-100 text-brand-700 font-bold text-sm flex items-center justify-center shrink-0">
                           {patient.full_name.charAt(0).toUpperCase()}
                         </div>
                         <span className="font-semibold text-gray-900">{patient.full_name}</span>
@@ -170,8 +170,8 @@ export function AdminPatients() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-3">
-                        <button className="text-blue-600 hover:text-blue-700 font-semibold text-sm">Modifier</button>
-                        <button className="text-green-600 hover:text-green-700 font-semibold text-sm">Message</button>
+                        <button className="text-brand-600 hover:text-brand-700 font-semibold text-sm">Modifier</button>
+                        <button className="text-brand-600 hover:text-brand-700 font-semibold text-sm">Message</button>
                       </div>
                     </td>
                   </tr>
@@ -213,7 +213,7 @@ export function AdminPatients() {
                     value={form.fullName}
                     onChange={(e) => setForm({ ...form, fullName: e.target.value })}
                     placeholder="Marie Dupont"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
                   />
                 </div>
 
@@ -225,7 +225,7 @@ export function AdminPatients() {
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="marie.dupont@email.com"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
                   />
                 </div>
 
@@ -241,7 +241,7 @@ export function AdminPatients() {
                       value={form.password}
                       onChange={(e) => setForm({ ...form, password: e.target.value })}
                       placeholder="••••••••"
-                      className="w-full pr-10 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none"
+                      className="w-full pr-10 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
                     />
                     <button
                       type="button"
@@ -265,7 +265,7 @@ export function AdminPatients() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex-1 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+                    className="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 disabled:bg-brand-400 text-white rounded-lg text-sm font-medium flex items-center justify-center gap-2"
                   >
                     {submitting && <Loader2 size={14} className="animate-spin" />}
                     {submitting ? "Création..." : "Créer le compte"}
@@ -278,7 +278,7 @@ export function AdminPatients() {
             {modalState === "success" && createdPatient && (
               <div className="px-6 py-5">
                 <div className="flex items-center gap-3 mb-4">
-                  <CheckCircle size={22} className="text-green-600 shrink-0" />
+                  <CheckCircle size={22} className="text-brand-600 shrink-0" />
                   <p className="text-sm text-gray-700">
                     Le compte de <strong>{createdPatient.fullName}</strong> a été créé. Transmettez ces accès au patient.
                   </p>
@@ -303,13 +303,13 @@ export function AdminPatients() {
                   onClick={copyCredentials}
                   className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
-                  {copied ? <CheckCircle size={15} className="text-green-600" /> : <Copy size={15} />}
+                  {copied ? <CheckCircle size={15} className="text-brand-600" /> : <Copy size={15} />}
                   {copied ? "Copié !" : "Copier les accès"}
                 </button>
 
                 <button
                   onClick={closeModal}
-                  className="mt-2 w-full py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium"
+                  className="mt-2 w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium"
                 >
                   Terminer
                 </button>

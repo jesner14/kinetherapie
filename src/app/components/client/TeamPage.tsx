@@ -27,10 +27,10 @@ export function TeamPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="py-20 bg-gradient-to-r from-green-700 via-green-600 to-emerald-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-black mb-5">{c("team.hero.title")}</h1>
-          <p className="text-green-50 text-base md:text-xl max-w-3xl mx-auto">{c("team.hero.text")}</p>
+          <p className="text-brand-50 text-base md:text-xl max-w-3xl mx-auto">{c("team.hero.text")}</p>
         </div>
       </section>
 
@@ -55,11 +55,11 @@ export function TeamPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-700/65 via-slate-500/15 to-transparent" />
                     <div className="absolute left-4 bottom-4 right-4">
                       <h3 className="text-2xl font-black text-white mb-1">{member.name}</h3>
-                      <p className="text-sm text-green-100 font-medium">{member.title}</p>
+                      <p className="text-sm text-brand-100 font-medium">{member.title}</p>
                     </div>
                   </div>
                   <div className="p-6">
-                    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-green-700 bg-green-50 rounded-full px-3 py-1 mb-4">
+                    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-700 bg-brand-50 rounded-full px-3 py-1 mb-4">
                       <Award size={14} /> {member.specialty}
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed mb-5">{member.bio}</p>
@@ -80,7 +80,7 @@ export function TeamPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {qualifications.map((item) => (
               <article key={item.titleKey} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-xl bg-green-50 text-green-700 flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center mb-4">
                   <Stethoscope size={20} />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{c(item.titleKey)}</h3>

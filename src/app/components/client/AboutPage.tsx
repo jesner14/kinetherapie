@@ -46,7 +46,7 @@ export function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-700/75 via-slate-600/50 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="max-w-6xl mx-auto px-6 w-full text-white">
-            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-green-200 bg-green-600/20 border border-green-300/30 rounded-full px-3 py-1 mb-4">
+            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-brand-200 bg-brand-600/20 border border-brand-300/30 rounded-full px-3 py-1 mb-4">
               <Sparkles size={14} /> Notre ADN
             </span>
             <h1 className="text-4xl md:text-6xl font-black max-w-3xl leading-tight">{c("about.hero.title")}</h1>
@@ -69,9 +69,9 @@ export function AboutPage() {
                 { val: "about.stats.satisfaction", lbl: "about.stats.satisfaction_label" },
                 { val: "about.stats.team",         lbl: "about.stats.team_label" },
               ].map((item) => (
-                <div key={item.val} className="rounded-2xl bg-gradient-to-br from-green-600 to-emerald-600 text-white p-6 shadow-lg">
+                <div key={item.val} className="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-600 text-white p-6 shadow-lg">
                   <p className="text-3xl md:text-4xl font-black mb-1">{c(item.val)}</p>
-                  <p className="text-sm text-green-100">{c(item.lbl)}</p>
+                  <p className="text-sm text-brand-100">{c(item.lbl)}</p>
                 </div>
               ))}
             </div>
@@ -88,7 +88,7 @@ export function AboutPage() {
               const Icon = item.icon;
               return (
                 <article key={item.titleKey} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-lg transition-all">
-                  <div className="w-11 h-11 rounded-xl bg-green-50 text-green-700 flex items-center justify-center mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center mb-4">
                     <Icon size={22} />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{c(item.titleKey)}</h3>
