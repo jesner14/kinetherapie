@@ -96,17 +96,17 @@ export function HomePage() {
           {slides.map((s) => (
             <div key={s.num} className="relative h-[76vh] min-h-[520px] max-h-[760px]">
               <img src={c(`home.hero.slide${s.num}.image`)} alt={c(`home.hero.slide${s.num}.title`)} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-700/70 via-slate-600/45 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-900/75 via-brand-900/45 to-transparent" />
               <div className="absolute inset-0 flex items-center">
                 <div className="max-w-6xl mx-auto px-6 w-full text-white">
                   <div className="max-w-2xl">
-                    <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-brand-200 bg-brand-600/20 border border-brand-300/30 rounded-full px-3 py-1 mb-5">
+                    <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-teal-200 bg-teal-600/20 border border-teal-300/30 rounded-full px-3 py-1 mb-5">
                       <Sparkles size={14} /> Kinesitherapie Premium
                     </span>
                     <h1 className="text-4xl md:text-6xl font-black leading-tight mb-5">{c(`home.hero.slide${s.num}.title`)}</h1>
                     <p className="text-base md:text-xl text-gray-100 mb-8 leading-relaxed max-w-xl">{c(`home.hero.slide${s.num}.text`)}</p>
                     <div className="flex flex-wrap gap-3">
-                      <Link to={s.to} className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-400 text-slate-900 px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-900/20">
+                      <Link to={s.to} className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-brand-600 hover:from-teal-400 hover:to-brand-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-900/20">
                         {c(`home.hero.slide${s.num}.cta`)}
                         <ArrowRight size={16} />
                       </Link>
@@ -153,7 +153,7 @@ export function HomePage() {
               const Icon = service.icon;
               return (
                 <article key={service.titleKey} className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center mb-5 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center mb-5 group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-brand-600 group-hover:text-white transition-all">
                     <Icon size={24} />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{c(service.titleKey)}</h3>
@@ -196,7 +196,7 @@ export function HomePage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-20 bg-gradient-to-r from-brand-600 via-brand-500 to-teal-500">
+      <section className="py-20 bg-gradient-to-r from-teal-500 via-teal-400 to-brand-500">
         <div className="max-w-5xl mx-auto px-6 text-center text-white">
           <h2 className="text-3xl md:text-5xl font-black mb-4">{c("home.cta.title")}</h2>
           <p className="text-brand-50 text-base md:text-xl mb-8 max-w-2xl mx-auto">{c("home.cta.text")}</p>

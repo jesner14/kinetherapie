@@ -31,7 +31,7 @@ export function ClientLayout() {
         <div className="max-w-6xl mx-auto px-6 py-3.5">
           <div className="flex justify-between items-center">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-brand-500 to-teal-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-brand-200 transition-shadow">
+              <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-brand-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-brand-200 transition-shadow">
                 <span className="text-white text-lg font-black">K</span>
               </div>
               <div>
@@ -49,7 +49,7 @@ export function ClientLayout() {
                     to={item.path}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-brand-600 text-white shadow-sm"
+                        ? "bg-gradient-to-r from-teal-500 to-brand-600 text-white shadow-sm"
                         : "text-gray-600 hover:text-brand-700 hover:bg-brand-50"
                     }`}
                   >
@@ -68,7 +68,7 @@ export function ClientLayout() {
               </Link>
               <Link
                 to="/login?role=admin"
-                className="px-4 py-2 text-sm font-semibold bg-brand-600 text-white rounded-lg hover:bg-brand-700 shadow-sm transition-all"
+                className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-teal-500 to-brand-600 text-white rounded-lg hover:from-teal-600 hover:to-brand-700 shadow-sm transition-all"
               >
                 Connexion
               </Link>
@@ -90,7 +90,7 @@ export function ClientLayout() {
                     key={item.path}
                     to={item.path}
                     className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      isActive ? "bg-brand-600 text-white" : "text-gray-700 hover:bg-gray-50"
+                      isActive ? "bg-gradient-to-r from-teal-500 to-brand-600 text-white" : "text-gray-700 hover:bg-gray-50"
                     }`}
                   >
                     {item.label}
@@ -99,7 +99,7 @@ export function ClientLayout() {
               })}
               <div className="flex gap-2 mt-2 pt-2 border-t border-gray-100">
                 <Link to="/login?role=patient" className="flex-1 text-center py-2 text-sm font-semibold text-brand-700 border border-brand-200 rounded-lg">Espace Patient</Link>
-                <Link to="/login?role=admin" className="flex-1 text-center py-2 text-sm font-semibold bg-brand-600 text-white rounded-lg">Connexion</Link>
+                <Link to="/login?role=admin" className="flex-1 text-center py-2 text-sm font-semibold bg-gradient-to-r from-teal-500 to-brand-600 text-white rounded-lg">Connexion</Link>
               </div>
             </nav>
           )}
@@ -117,7 +117,7 @@ export function ClientLayout() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 bg-gradient-to-br from-brand-500 to-teal-500 rounded-xl flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-teal-500 to-brand-500 rounded-xl flex items-center justify-center">
                   <span className="text-white font-black">K</span>
                 </div>
                 <span className="text-lg font-bold">Kiné Excellence</span>

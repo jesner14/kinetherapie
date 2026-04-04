@@ -52,7 +52,7 @@ export function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-brand-50 to-brand-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 shadow-2xl p-7">
         <div className="text-center mb-7">
-          <div className="w-14 h-14 bg-gradient-to-br from-brand-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-brand-200">
+          <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-brand-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-brand-200">
             <span className="text-white text-2xl font-black">K</span>
           </div>
           <h1 className="text-2xl font-black text-gray-900">Kine Excellence</h1>
@@ -132,7 +132,7 @@ export function LoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-600 text-white py-3 rounded-xl hover:from-brand-700 hover:to-brand-700 transition-all font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-brand-200"
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-brand-600 text-white py-3 rounded-xl hover:from-teal-600 hover:to-brand-700 transition-all font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-brand-200"
           >
             {submitting ? (
               <>

@@ -49,7 +49,7 @@ export function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-700 to-teal-600 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-teal-600 to-brand-700 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 text-center">
           <div className="w-14 h-14 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="text-brand-600" size={28} />
@@ -70,7 +70,7 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-700 to-teal-600 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-teal-600 to-brand-700 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
         {/* Logo */}
         <div className="text-center mb-6">

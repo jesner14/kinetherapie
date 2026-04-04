@@ -32,7 +32,7 @@ export function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
-      <section className="py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white">
+      <section className="py-20 bg-gradient-to-r from-teal-600 via-teal-500 to-brand-500 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-slate-100 bg-white/15 border border-white/25 rounded-full px-3 py-1 mb-4">
             <Sparkles size={14} /> Avant / Apres

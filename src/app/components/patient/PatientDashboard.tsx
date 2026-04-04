@@ -57,7 +57,7 @@ export function PatientDashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link to="/patient/booking">
-          <div className="bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all cursor-pointer">
+          <div className="bg-gradient-to-r from-teal-500 to-brand-600 text-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all cursor-pointer">
             <Calendar size={48} className="mb-4" />
             <h3 className="text-2xl font-bold mb-2">Réserver un Rendez-vous</h3>
             <p className="text-brand-100">
@@ -67,7 +67,7 @@ export function PatientDashboard() {
         </Link>
 
         <Link to="/patient/messages">
-          <div className="bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all cursor-pointer">
+          <div className="bg-gradient-to-r from-teal-500 to-brand-600 text-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all cursor-pointer">
             <MessageSquare size={48} className="mb-4" />
             <h3 className="text-2xl font-bold mb-2">Messagerie</h3>
             <p className="text-brand-100">

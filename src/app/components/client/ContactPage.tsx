@@ -39,7 +39,7 @@ export function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white">
+      <section className="py-20 bg-gradient-to-r from-teal-600 via-teal-500 to-brand-500 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-black mb-5">{c("contact.hero.title")}</h1>
           <p className="text-slate-100 text-base md:text-xl max-w-3xl mx-auto">{c("contact.hero.text")}</p>
@@ -110,7 +110,7 @@ export function ContactPage() {
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-600 text-white px-6 py-3 rounded-xl hover:from-brand-700 hover:to-brand-700 transition-all text-sm font-semibold"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-brand-600 text-white px-6 py-3 rounded-xl hover:from-teal-600 hover:to-brand-700 transition-all text-sm font-semibold"
                 >
                   <Send size={16} /> Envoyer
                 </button>

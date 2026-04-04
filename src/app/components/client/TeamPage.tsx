@@ -27,7 +27,7 @@ export function TeamPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-teal-500 text-white">
+      <section className="py-20 bg-gradient-to-r from-teal-600 via-teal-500 to-brand-500 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-black mb-5">{c("team.hero.title")}</h1>
           <p className="text-brand-50 text-base md:text-xl max-w-3xl mx-auto">{c("team.hero.text")}</p>

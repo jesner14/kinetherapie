@@ -69,7 +69,7 @@ export function AboutPage() {
                 { val: "about.stats.satisfaction", lbl: "about.stats.satisfaction_label" },
                 { val: "about.stats.team",         lbl: "about.stats.team_label" },
               ].map((item) => (
-                <div key={item.val} className="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-600 text-white p-6 shadow-lg">
+                <div key={item.val} className="rounded-2xl bg-gradient-to-br from-teal-500 to-brand-600 text-white p-6 shadow-lg">
                   <p className="text-3xl md:text-4xl font-black mb-1">{c(item.val)}</p>
                   <p className="text-sm text-brand-100">{c(item.lbl)}</p>
                 </div>
