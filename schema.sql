@@ -176,7 +176,39 @@ create policy "team_members writable by doctors"
   );
 
 -- ─────────────────────────────────────────
--- 8. GALLERY PHOTOS
+-- 8. DISPONIBILITÉS MÉDECIN
+-- ─────────────────────────────────────────
+drop table if exists public.availabilities;
+
+create table if not exists public.availabilities (
+  id           uuid primary key default gen_random_uuid(),
+  doctor_id    uuid not null references public.profiles(id) on delete cascade,
+  slot_date    date not null,
+  start_time   time not null,
+  end_time     time not null,
+  is_active    boolean not null default true,
+  created_at   timestamptz default now(),
+  constraint no_overlap_check check (start_time < end_time)
+);
+
+create index if not exists availabilities_doctor_date_idx on public.availabilities(doctor_id, slot_date);
+
+alter table public.availabilities enable row level security;
+
+create policy "availabilities readable by all"
+  on public.availabilities for select using (true);
+
+create policy "availabilities writable by doctors"
+  on public.availabilities for all to authenticated
+  using (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  )
+  with check (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  );
+
+-- ─────────────────────────────────────────
+-- 9. GALLERY PHOTOS
 -- ─────────────────────────────────────────
 create table if not exists public.gallery_photos (
   id            uuid primary key default gen_random_uuid(),
@@ -200,6 +232,56 @@ create policy "gallery_photos writable by doctors"
   with check (
     exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
   );
+
+-- ─────────────────────────────────────────
+-- 10. RESERVATIONS (appointments patients)
+-- ─────────────────────────────────────────
+create table if not exists public.appointments (
+  id               uuid primary key default gen_random_uuid(),
+  availability_id  uuid not null references public.availabilities(id) on delete cascade,
+  patient_id       uuid not null references public.profiles(id) on delete cascade,
+  doctor_id        uuid not null references public.profiles(id) on delete cascade,
+  status           text not null default 'pending'
+                     check (status in ('pending', 'confirmed', 'rejected', 'rescheduled')),
+  note             text,
+  created_at       timestamptz default now(),
+  updated_at       timestamptz default now()
+);
+
+create index if not exists appointments_availability_idx on public.appointments(availability_id);
+create index if not exists appointments_patient_idx      on public.appointments(patient_id);
+create index if not exists appointments_doctor_idx       on public.appointments(doctor_id);
+create index if not exists appointments_status_idx       on public.appointments(status);
+
+alter table public.appointments enable row level security;
+
+-- All authenticated users see confirmed appointments (to know which slots are taken)
+-- + each patient sees their own appointments (all statuses)
+-- + doctors see everything
+create policy "appointments select"
+  on public.appointments for select to authenticated
+  using (
+    auth.uid() = patient_id
+    or status = 'confirmed'
+    or exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  );
+
+-- Patients can create their own pending appointments
+create policy "patients create appointments"
+  on public.appointments for insert to authenticated
+  with check (auth.uid() = patient_id);
+
+-- Doctors can update appointment status (confirm, reject, reschedule)
+create policy "doctors update appointments"
+  on public.appointments for update to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+-- Doctors can also insert appointments (rescheduling creates a new confirmed row)
+create policy "doctors insert appointments"
+  on public.appointments for insert to authenticated
+  with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+alter publication supabase_realtime add table public.appointments;
 
 -- ─────────────────────────────────────────
 -- 9. SEED: contenu initial du site
@@ -299,7 +381,28 @@ insert into public.site_content (id, page, section, key, value, type, label) val
 ('team.qualifications.q3_text',  'team', 'qualifications', 'q3_text', 'Expertise en rééducation sportive, neurologique, respiratoire et périnéale.',                 'textarea', 'Qualification 3 — Texte'),
 -- GLOBAL
 ('global.cabinet_name',          'global', 'brand', 'cabinet_name', 'Kiné Excellence',                                                                               'text',     'Nom du cabinet'),
-('global.tagline',               'global', 'brand', 'tagline',      'Kinésithérapie Premium',                                                                        'text',     'Slogan du cabinet')
+('global.tagline',               'global', 'brand', 'tagline',      'Kinésithérapie Premium',                                                                        'text',     'Slogan du cabinet'),
+-- FOOTER
+('footer.brand.name',            'footer', 'brand', 'name',         'Kiné Excellence',                                                                               'text',     'Footer — Nom du cabinet'),
+('footer.brand.description',     'footer', 'brand', 'description',  'Centre de kinésithérapie moderne offrant des soins personnalisés et de qualité depuis 2010.',    'textarea', 'Footer — Description'),
+('footer.contact.address',       'footer', 'contact', 'address',    '123 Rue de la Santé, Paris',                                                                    'text',     'Footer — Adresse'),
+('footer.contact.phone',         'footer', 'contact', 'phone',      '01 23 45 67 89',                                                                                'text',     'Footer — Téléphone'),
+('footer.contact.email',         'footer', 'contact', 'email',      'contact@kine-excellence.fr',                                                                    'text',     'Footer — Email'),
+('footer.hours.weekdays',        'footer', 'hours', 'weekdays',     'Lun – Ven : 8h – 19h',                                                                          'text',     'Footer — Horaires lundi-vendredi'),
+('footer.hours.saturday',        'footer', 'hours', 'saturday',     'Samedi : 9h – 13h',                                                                             'text',     'Footer — Horaires samedi'),
+('footer.hours.sunday',          'footer', 'hours', 'sunday',       'Dimanche : Fermé',                                                                              'text',     'Footer — Dimanche'),
+('footer.legal.copyright',       'footer', 'legal', 'copyright',    '© 2026 Kiné Excellence. Tous droits réservés.',                                                  'text',     'Footer — Copyright'),
+-- FOOTER — Réseaux sociaux
+('footer.social.whatsapp.url',      'footer', 'social', 'whatsapp_url',      '',      'text', 'Footer — WhatsApp (lien)'),
+('footer.social.whatsapp.visible',  'footer', 'social', 'whatsapp_visible',  'false', 'text', 'Footer — WhatsApp visible'),
+('footer.social.facebook.url',      'footer', 'social', 'facebook_url',      '',      'text', 'Footer — Facebook (lien)'),
+('footer.social.facebook.visible',  'footer', 'social', 'facebook_visible',  'false', 'text', 'Footer — Facebook visible'),
+('footer.social.instagram.url',     'footer', 'social', 'instagram_url',     '',      'text', 'Footer — Instagram (lien)'),
+('footer.social.instagram.visible', 'footer', 'social', 'instagram_visible', 'false', 'text', 'Footer — Instagram visible'),
+('footer.social.tiktok.url',        'footer', 'social', 'tiktok_url',        '',      'text', 'Footer — TikTok (lien)'),
+('footer.social.tiktok.visible',    'footer', 'social', 'tiktok_visible',    'false', 'text', 'Footer — TikTok visible'),
+('footer.social.twitter.url',       'footer', 'social', 'twitter_url',       '',      'text', 'Footer — Twitter/X (lien)'),
+('footer.social.twitter.visible',   'footer', 'social', 'twitter_visible',   'false', 'text', 'Footer — Twitter/X visible')
 on conflict (id) do nothing;
 
 -- SEED: membres de l'équipe initiaux

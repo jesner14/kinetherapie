@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { X, Image as ImageIcon, Sparkles } from "lucide-react";
 import { supabase, type GalleryPhoto } from "../../../lib/supabase";
+import { PageLoader } from "../common/PageLoader";
 
 export function GalleryPage() {
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
@@ -30,6 +31,8 @@ export function GalleryPage() {
     fetchPhotos();
   }, []);
 
+  if (loading) return <PageLoader text="Chargement de la galerie..." />;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
       <section className="py-20 bg-gradient-to-r from-teal-600 via-teal-500 to-brand-500 text-white">
@@ -46,9 +49,7 @@ export function GalleryPage() {
 
       <section className="py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-6">
-          {loading ? (
-            <div className="text-center py-20 text-gray-500">Chargement de la galerie...</div>
-          ) : error ? (
+          {error ? (
             <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 text-sm">
               Impossible de charger la galerie: {error}
             </div>

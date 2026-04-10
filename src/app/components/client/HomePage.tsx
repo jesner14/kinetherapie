@@ -5,6 +5,7 @@ import { Star, Calendar, CheckCircle2, Heart, Sparkles, Activity, ArrowRight } f
 import { mockReviews } from "../../data/mockData";
 import { Link } from "react-router";
 import { useSiteContent } from "../../../lib/hooks/useSiteContent";
+import { PageLoader } from "../common/PageLoader";
 
 const DEFAULTS: Record<string, string> = {
   "home.hero.slide1.title":        "Kiné Excellence — Votre Récupération, Notre Priorité",
@@ -45,6 +46,8 @@ const DEFAULTS: Record<string, string> = {
 export function HomePage() {
   const { content, loading } = useSiteContent("home", DEFAULTS);
   const c = (key: string) => content[key] ?? DEFAULTS[key] ?? "";
+
+  if (loading) return <PageLoader text="Chargement de la page..." />;
 
   const carouselSettings = {
     dots: true,

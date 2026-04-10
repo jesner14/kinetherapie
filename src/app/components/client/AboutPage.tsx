@@ -1,5 +1,6 @@
 import { CheckCircle, Award, Target, Users, Sparkles } from "lucide-react";
 import { useSiteContent } from "../../../lib/hooks/useSiteContent";
+import { PageLoader } from "../common/PageLoader";
 
 const DEFAULTS: Record<string, string> = {
   "about.hero.title":          "Excellence, Écoute et Dévouement",
@@ -29,8 +30,10 @@ const DEFAULTS: Record<string, string> = {
 };
 
 export function AboutPage() {
-  const { content } = useSiteContent("about", DEFAULTS);
+  const { content, loading } = useSiteContent("about", DEFAULTS);
   const c = (key: string) => content[key] ?? DEFAULTS[key] ?? "";
+
+  if (loading) return <PageLoader text="Chargement de la page..." />;
 
   const values = [
     { icon: Award,        titleKey: "about.values.v1_title", textKey: "about.values.v1_text" },

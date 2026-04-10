@@ -6,6 +6,7 @@ import { useConversations } from "../../../lib/hooks/useConversations";
 import { useMessages } from "../../../lib/hooks/useMessages";
 import { supabase } from "../../../lib/supabase";
 import type { Conversation, Profile } from "../../../lib/supabase";
+import { PageLoader } from "../common/PageLoader";
 
 function relativeTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -118,6 +119,8 @@ export function AdminMessages() {
       </div>
     );
   }
+
+  if (convsLoading) return <PageLoader text="Chargement de la messagerie..." />;
 
   return (
     <div className="space-y-3">

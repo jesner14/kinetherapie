@@ -1,6 +1,7 @@
 import { Mail, Award, Stethoscope } from "lucide-react";
 import { useTeamMembers } from "../../../lib/hooks/useTeamMembers";
 import { useSiteContent } from "../../../lib/hooks/useSiteContent";
+import { PageLoader } from "../common/PageLoader";
 
 const DEFAULTS: Record<string, string> = {
   "team.hero.title":               "Notre Équipe",
@@ -19,6 +20,8 @@ export function TeamPage() {
   const { content } = useSiteContent("team", DEFAULTS);
   const c = (key: string) => content[key] ?? DEFAULTS[key] ?? "";
 
+  if (loading) return <PageLoader text="Chargement de l'équipe..." />;
+
   const qualifications = [
     { titleKey: "team.qualifications.q1_title", textKey: "team.qualifications.q1_text" },
     { titleKey: "team.qualifications.q2_title", textKey: "team.qualifications.q2_text" },
@@ -36,15 +39,8 @@ export function TeamPage() {
 
       <section className="py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-6">
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-2xl bg-gray-100 h-96 animate-pulse" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {members.map((member) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {members.map((member) => (
                 <article key={member.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all overflow-hidden">
                   <div className="relative h-72 overflow-hidden">
                     <img
@@ -70,7 +66,6 @@ export function TeamPage() {
                 </article>
               ))}
             </div>
-          )}
         </div>
       </section>
 

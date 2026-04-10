@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { useSiteContent } from "../../../lib/hooks/useSiteContent";
+import { PageLoader } from "../common/PageLoader";
 
 const DEFAULTS: Record<string, string> = {
   "contact.hero.title":        "Contactez-Nous",
@@ -18,7 +19,7 @@ const DEFAULTS: Record<string, string> = {
 };
 
 export function ContactPage() {
-  const { content } = useSiteContent("contact", DEFAULTS);
+  const { content, loading } = useSiteContent("contact", DEFAULTS);
   const c = (key: string) => content[key] ?? DEFAULTS[key] ?? "";
 
   const [formData, setFormData] = useState({
@@ -29,6 +30,8 @@ export function ContactPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+
+  if (loading) return <PageLoader text="Chargement de la page..." />;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

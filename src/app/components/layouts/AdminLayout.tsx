@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router";
 import {
   LayoutDashboard,
@@ -8,13 +9,86 @@ import {
   MessageSquare,
   Star,
   LogOut,
+  CalendarCheck,
 } from "lucide-react";
 import { useAuth } from "../../../lib/AuthContext";
+import { supabase } from "../../../lib/supabase";
+import { toast } from "sonner";
 
 export function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut, profile } = useAuth();
+  const { signOut, profile, user } = useAuth();
+
+  // Badge: count of new pending appointments not yet seen by doctor
+  const [pendingBadge, setPendingBadge] = useState(0);
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+
+  // On mount: fetch current pending count
+  useEffect(() => {
+    if (!user?.id) return;
+
+    supabase
+      .from("appointments")
+      .select("id", { count: "exact", head: true })
+      .eq("doctor_id", user.id)
+      .eq("status", "pending")
+      .then(({ count }) => setPendingBadge(count ?? 0));
+
+    // Subscribe to new appointments (realtime)
+    const channel = supabase
+      .channel("admin_appointments_notify")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "appointments" },
+        async (payload) => {
+          // Only notify the doctor targeted by this appointment
+          if ((payload.new as { doctor_id: string }).doctor_id !== user.id) return;
+
+          // Fetch the patient's name for the toast
+          const { data: patientData } = await supabase
+            .from("profiles")
+            .select("full_name")
+            .eq("id", (payload.new as { patient_id: string }).patient_id)
+            .single();
+
+          const { data: slotData } = await supabase
+            .from("availabilities")
+            .select("slot_date, start_time")
+            .eq("id", (payload.new as { availability_id: string }).availability_id)
+            .single();
+
+          const name = patientData?.full_name ?? "Un patient";
+          const date = slotData
+            ? new Date(slotData.slot_date + "T00:00:00").toLocaleDateString("fr-FR", {
+                day: "numeric", month: "long",
+              }) + " à " + slotData.start_time.slice(0, 5)
+            : "";
+
+          toast.info(`🗓 Nouveau rendez-vous`, {
+            description: `${name} a réservé${date ? " le " + date : ""}.`,
+            action: {
+              label: "Voir",
+              onClick: () => navigate("/admin/appointments"),
+            },
+            duration: 8000,
+          });
+
+          setPendingBadge(n => n + 1);
+        }
+      )
+      .subscribe();
+
+    channelRef.current = channel;
+    return () => { channel.unsubscribe(); };
+  }, [user?.id]);
+
+  // Reset badge when doctor visits the appointments page
+  useEffect(() => {
+    if (location.pathname.startsWith("/admin/appointments")) {
+      setPendingBadge(0);
+    }
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     await signOut();
@@ -22,13 +96,14 @@ export function AdminLayout() {
   };
 
   const navItems = [
-    { path: "/admin", label: "Tableau de Bord", icon: LayoutDashboard },
-    { path: "/admin/content", label: "Gestion du Contenu", icon: FileText },
-    { path: "/admin/gallery", label: "Galerie", icon: Images },
-    { path: "/admin/patients", label: "Patients", icon: Users },
-    { path: "/admin/calendar", label: "Calendrier", icon: Calendar },
-    { path: "/admin/messages", label: "Messages", icon: MessageSquare },
-    { path: "/admin/reviews", label: "Avis", icon: Star },
+    { path: "/admin",              label: "Tableau de Bord",    icon: LayoutDashboard },
+    { path: "/admin/appointments", label: "Rendez-vous",        icon: CalendarCheck, badge: pendingBadge },
+    { path: "/admin/content",      label: "Gestion du Contenu", icon: FileText },
+    { path: "/admin/gallery",      label: "Galerie",            icon: Images },
+    { path: "/admin/patients",     label: "Patients",           icon: Users },
+    { path: "/admin/calendar",     label: "Calendrier",         icon: Calendar },
+    { path: "/admin/messages",     label: "Messages",           icon: MessageSquare },
+    { path: "/admin/reviews",      label: "Avis",               icon: Star },
   ];
 
   return (
@@ -59,7 +134,12 @@ export function AdminLayout() {
                 }`}
               >
                 <Icon size={20} />
-                <span>{item.label}</span>
+                <span className="flex-1">{item.label}</span>
+                {item.badge && item.badge > 0 ? (
+                  <span className="bg-red-500 text-white text-xs font-bold min-w-[20px] h-5 flex items-center justify-center rounded-full px-1">
+                    {item.badge > 99 ? "99+" : item.badge}
+                  </span>
+                ) : null}
               </Link>
             );
           })}

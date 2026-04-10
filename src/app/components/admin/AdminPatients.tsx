@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { Plus, Search, Calendar as CalendarIcon, Loader2, UserX, CheckCircle, Copy, Eye, EyeOff, X } from "lucide-react";
 import { supabase, type Profile } from "../../../lib/supabase";
+import { PageLoader } from "../common/PageLoader";
 
 type ModalState = "form" | "success";
 
@@ -93,6 +94,8 @@ export function AdminPatients() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  if (loading) return <PageLoader text="Chargement des patients..." />;
 
   const filteredPatients = patients.filter((p) =>
     p.full_name.toLowerCase().includes(searchTerm.toLowerCase())

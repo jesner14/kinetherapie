@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ImagePlus, Trash2, Loader2, AlertCircle, Upload } from "lucide-react";
 import { supabase, type GalleryPhoto } from "../../../lib/supabase";
 import { toast } from "sonner";
+import { PageLoader } from "../common/PageLoader";
 
 export function AdminGallery() {
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
@@ -93,6 +94,8 @@ export function AdminGallery() {
     setPhotos((prev) => prev.filter((p) => p.id !== id));
     toast.success("Photo supprimée.");
   };
+
+  if (loading) return <PageLoader text="Chargement de la galerie..." />;
 
   return (
     <div className="space-y-6">
@@ -187,7 +190,17 @@ export function AdminGallery() {
         <h2 className="text-lg font-bold text-gray-900 mb-4">Photos existantes</h2>
 
         {loading ? (
-          <div className="py-16 flex items-center justify-center text-gray-500">Chargement...</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
+                <div className="w-full h-44 bg-gray-200 animate-pulse" />
+                <div className="p-4 space-y-2">
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-2/3" />
+                  <div className="h-3 bg-gray-100 animate-pulse rounded w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : photos.length === 0 ? (
           <p className="text-gray-500">Aucune photo ajoutée.</p>
         ) : (

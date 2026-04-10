@@ -15,6 +15,7 @@ import { AdminPatients } from "./components/admin/AdminPatients";
 import { AdminCalendar } from "./components/admin/AdminCalendar";
 import { AdminMessages } from "./components/admin/AdminMessages";
 import { AdminReviews } from "./components/admin/AdminReviews";
+import { AdminAppointments } from "./components/admin/AdminAppointments";
 import { PatientDashboard } from "./components/patient/PatientDashboard";
 import { PatientBooking } from "./components/patient/PatientBooking";
 import { PatientMessages } from "./components/patient/PatientMessages";
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
       { path: "gallery", Component: AdminGallery },
       { path: "galerie", Component: AdminGallery },
       { path: "patients", Component: AdminPatients },
+      { path: "appointments", Component: AdminAppointments },
       { path: "calendar", Component: AdminCalendar },
       { path: "messages", Component: AdminMessages },
       { path: "reviews", Component: AdminReviews },
