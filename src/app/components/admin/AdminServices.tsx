@@ -166,37 +166,6 @@ function ServiceModal({ open, service, onClose, onSaved }: ServiceModalProps) {
             </div>
           </div>
 
-          {/* Wave Payment Link */}
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-              Lien de paiement Wave
-            </label>
-            <div className="relative">
-              <LinkIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="url"
-                value={wavePaymentLink}
-                onChange={(e) => setWavePaymentLink(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
-                placeholder="https://pay.wave.com/m/M_xxx"
-              />
-            </div>
-            {wavePaymentLink && price && (
-              <a
-                href={`${wavePaymentLink}?amount=${price}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-2 text-xs text-brand-600 hover:underline"
-              >
-                <ExternalLink size={12} />
-                Tester le lien ({Number(price).toLocaleString("fr-FR")} FCFA)
-              </a>
-            )}
-            <p className="mt-1.5 text-xs text-gray-400">
-              Le montant sera automatiquement ajouté à l'URL lors du paiement.
-            </p>
-          </div>
-
           {/* Active toggle */}
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
             <div>
