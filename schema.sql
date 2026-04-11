@@ -284,6 +284,143 @@ create policy "doctors insert appointments"
 alter publication supabase_realtime add table public.appointments;
 
 -- ─────────────────────────────────────────
+-- 11. MESSAGES DU FORMULAIRE DE CONTACT
+-- ─────────────────────────────────────────
+create table if not exists public.contact_messages (
+  id         uuid primary key default gen_random_uuid(),
+  name       text not null,
+  email      text not null,
+  phone      text,
+  message    text not null,
+  status     text not null default 'new' check (status in ('new', 'read', 'replied')),
+  created_at timestamptz default now()
+);
+
+alter table public.contact_messages enable row level security;
+
+-- Tout visiteur (même anonyme) peut soumettre un message
+create policy "public can submit contact message"
+  on public.contact_messages for insert
+  with check (true);
+
+-- Seuls les médecins authentifiés peuvent lire
+create policy "doctors read contact messages"
+  on public.contact_messages for select to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+-- Les médecins peuvent mettre à jour le statut
+create policy "doctors update contact messages"
+  on public.contact_messages for update to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+alter publication supabase_realtime add table public.contact_messages;
+
+-- ─────────────────────────────────────────
+-- 12. SERVICES / PRESTATIONS MÉDICALES
+-- ─────────────────────────────────────────
+create table if not exists public.services (
+  id             uuid primary key default gen_random_uuid(),
+  name           text not null,
+  description    text,
+  price          numeric(10, 2),
+  -- Le lien Wave global est stocké dans site_content (id: global.wave.payment_link)
+  is_active      boolean not null default true,
+  sort_order     integer not null default 0,
+  created_at     timestamptz default now()
+);
+
+alter table public.services enable row level security;
+
+-- Lecture publique : seuls les services actifs sont visibles côté client
+create policy "services readable by all (active only)"
+  on public.services for select
+  using (is_active = true);
+
+-- Les médecins peuvent lire tous les services (y compris inactifs)
+create policy "services readable by doctors"
+  on public.services for select to authenticated
+  using (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  );
+
+-- Les médecins peuvent créer / modifier / supprimer des services
+create policy "services writable by doctors"
+  on public.services for all to authenticated
+  using (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  )
+  with check (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  );
+
+-- ─────────────────────────────────────────
+-- 13. JOURS DE CONSULTATION
+-- ─────────────────────────────────────────
+create table if not exists public.consultation_schedules (
+  day_of_week  integer primary key check (day_of_week between 0 and 6),
+  -- 0=Dimanche  1=Lundi  2=Mardi  3=Mercredi  4=Jeudi  5=Vendredi  6=Samedi
+  start_time   time not null default '09:00:00',
+  is_active    boolean not null default false,
+  updated_at   timestamptz default now()
+);
+
+alter table public.consultation_schedules enable row level security;
+
+create policy "consultation_schedules readable by all"
+  on public.consultation_schedules for select using (true);
+
+create policy "consultation_schedules writable by doctors"
+  on public.consultation_schedules for all to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'))
+  with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+-- Pré-remplissage des 7 jours (inactifs par défaut)
+insert into public.consultation_schedules (day_of_week, start_time, is_active)
+values (0,'09:00',false),(1,'09:00',false),(2,'09:00',false),(3,'09:00',false),
+       (4,'09:00',false),(5,'09:00',false),(6,'09:00',false)
+on conflict (day_of_week) do nothing;
+
+-- ─────────────────────────────────────────
+-- 14. DEMANDES DE RÉSERVATION
+-- ─────────────────────────────────────────
+create table if not exists public.booking_requests (
+  id                  uuid primary key default gen_random_uuid(),
+  first_name          text not null,
+  last_name           text not null,
+  phone               text not null,
+  email               text not null,
+  service_id          uuid references public.services(id) on delete set null,
+  service_name        text not null,
+  service_price       numeric(10, 2),
+  payment_screenshot  text,             -- base64 de la capture de paiement
+  status              text not null default 'pending'
+                        check (status in ('pending', 'validated', 'rejected')),
+  assigned_date       date,
+  assigned_time       time,
+  rejection_reason    text,
+  created_at          timestamptz default now()
+);
+
+alter table public.booking_requests enable row level security;
+
+create policy "public can submit booking request"
+  on public.booking_requests for insert with check (true);
+
+create policy "doctors read booking requests"
+  on public.booking_requests for select to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+create policy "doctors update booking requests"
+  on public.booking_requests for update to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+create policy "doctors delete booking requests"
+  on public.booking_requests for delete to authenticated
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor'));
+
+alter publication supabase_realtime add table public.booking_requests;
+
+-- ─────────────────────────────────────────
 -- 9. SEED: contenu initial du site
 -- ─────────────────────────────────────────
 insert into public.site_content (id, page, section, key, value, type, label) values

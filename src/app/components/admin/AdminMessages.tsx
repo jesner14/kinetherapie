@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Send, MessageSquare, Check, CheckCheck, Loader2, UserCircle2, Search } from "lucide-react";
+import { Send, MessageSquare, Check, CheckCheck, Loader2, UserCircle2, Search, Mail, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../../../lib/AuthContext";
 import { useConversations } from "../../../lib/hooks/useConversations";
@@ -7,6 +7,16 @@ import { useMessages } from "../../../lib/hooks/useMessages";
 import { supabase } from "../../../lib/supabase";
 import type { Conversation, Profile } from "../../../lib/supabase";
 import { PageLoader } from "../common/PageLoader";
+
+interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  message: string;
+  status: "new" | "read" | "replied";
+  created_at: string;
+}
 
 function relativeTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -30,6 +40,10 @@ function Avatar({ name, size = "sm" }: { name: string; size?: "sm" | "md" }) {
 
 export function AdminMessages() {
   const { user, profile } = useAuth();
+  const [activeTab, setActiveTab] = useState<"chat" | "contact">("chat");
+  const [contactMsgs, setContactMsgs] = useState<ContactMessage[]>([]);
+  const [contactLoading, setContactLoading] = useState(true);
+  const [newContactBadge, setNewContactBadge] = useState(0);
   const [selectedConv, setSelectedConv] = useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -89,6 +103,40 @@ export function AdminMessages() {
     }
   }, [conversations]);
 
+  // ── Contact form messages ─────────────────────────────────
+  useEffect(() => {
+    async function fetchContactMsgs() {
+      setContactLoading(true);
+      const { data } = await supabase
+        .from("contact_messages")
+        .select("*")
+        .order("created_at", { ascending: false });
+      setContactMsgs((data as ContactMessage[]) ?? []);
+      const newCount = ((data as ContactMessage[]) ?? []).filter((m) => m.status === "new").length;
+      setNewContactBadge(newCount);
+      setContactLoading(false);
+    }
+    fetchContactMsgs();
+
+    const channel = supabase
+      .channel("admin-contact-watch")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "contact_messages" },
+        (payload) => {
+          const msg = payload.new as ContactMessage;
+          setContactMsgs((prev) => [msg, ...prev]);
+          setNewContactBadge((n) => n + 1);
+          toast.info(`📩 Nouveau message de ${msg.name}`, {
+            description: msg.message.length > 80 ? msg.message.slice(0, 80) + "…" : msg.message,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   // Mark messages as read + scroll
   useEffect(() => {
     if (selectedConv && user?.id) markRead(user.id);
@@ -102,6 +150,14 @@ export function AdminMessages() {
     await sendMessage(newMessage, user.id);
     setNewMessage("");
     setSending(false);
+  };
+
+  const markContactRead = async (id: string) => {
+    await supabase.from("contact_messages").update({ status: "read" }).eq("id", id).eq("status", "new");
+    setContactMsgs((prev) =>
+      prev.map((m) => (m.id === id && m.status === "new" ? { ...m, status: "read" } : m))
+    );
+    setNewContactBadge((n) => Math.max(0, n - 1));
   };
 
   const filteredConvs = conversations.filter((c) => {
@@ -133,6 +189,97 @@ export function AdminMessages() {
         <p className="text-xs text-gray-500">Communiquez directement avec vos patients</p>
       </div>
 
+      {/* Tab bar */}
+      <div className="flex gap-1 border-b border-gray-200">
+        <button
+          onClick={() => setActiveTab("chat")}
+          className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
+            activeTab === "chat"
+              ? "bg-white border border-b-white border-gray-200 text-brand-700 -mb-px"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          <MessageSquare size={14} /> Conversations patients
+        </button>
+        <button
+          onClick={() => { setActiveTab("contact"); setNewContactBadge(0); }}
+          className={`relative flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
+            activeTab === "contact"
+              ? "bg-white border border-b-white border-gray-200 text-brand-700 -mb-px"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          <Mail size={14} /> Formulaire de contact
+          {newContactBadge > 0 && (
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+              {newContactBadge}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* ── TAB: Contact form messages ───────────────────────── */}
+      {activeTab === "contact" && (
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          {contactLoading ? (
+            <PageLoader text="Chargement des messages..." />
+          ) : contactMsgs.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 gap-3 text-gray-300">
+              <Mail size={40} className="opacity-40" />
+              <p className="text-sm">Aucun message reçu via le formulaire de contact</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {contactMsgs.map((msg) => (
+                <div
+                  key={msg.id}
+                  onClick={() => { if (msg.status === "new") markContactRead(msg.id); }}
+                  className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+                    msg.status === "new" ? "bg-brand-50 border-l-4 border-brand-500" : ""
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center text-sm shrink-0">
+                        {msg.name.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                          {msg.name}
+                          {msg.status === "new" && (
+                            <span className="text-[10px] font-bold bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full">
+                              Nouveau
+                            </span>
+                          )}
+                          {msg.status === "replied" && (
+                            <span className="text-[10px] font-bold bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full">
+                              Répondu
+                            </span>
+                          )}
+                        </p>
+                        <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
+                          <span className="flex items-center gap-1"><Mail size={10} />{msg.email}</span>
+                          {msg.phone && <span className="flex items-center gap-1"><Phone size={10} />{msg.phone}</span>}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-[11px] text-gray-400 shrink-0">
+                      {new Date(msg.created_at).toLocaleDateString("fr-FR", {
+                        day: "numeric", month: "short", year: "numeric",
+                        hour: "2-digit", minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-gray-700 ml-12 leading-relaxed">{msg.message}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── TAB: Patient conversations ────────────────────────── */}
+      {activeTab === "chat" && (
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 h-[520px]">
         {/* ── Sidebar: patient list ───────────────────────────── */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col overflow-hidden">
@@ -281,6 +428,7 @@ export function AdminMessages() {
           </form>
         </div>
       </div>
+      )} {/* end activeTab === "chat" */}
     </div>
   );
 }

@@ -10,6 +10,8 @@ import {
   Star,
   LogOut,
   CalendarCheck,
+  Stethoscope,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "../../../lib/AuthContext";
 import { supabase } from "../../../lib/supabase";
@@ -22,6 +24,7 @@ export function AdminLayout() {
 
   // Badge: count of new pending appointments not yet seen by doctor
   const [pendingBadge, setPendingBadge] = useState(0);
+  const [bookingBadge, setBookingBadge] = useState(0);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   // On mount: fetch current pending count
@@ -34,6 +37,12 @@ export function AdminLayout() {
       .eq("doctor_id", user.id)
       .eq("status", "pending")
       .then(({ count }) => setPendingBadge(count ?? 0));
+
+    supabase
+      .from("booking_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending")
+      .then(({ count }) => setBookingBadge(count ?? 0));
 
     // Subscribe to new appointments (realtime)
     const channel = supabase
@@ -85,9 +94,8 @@ export function AdminLayout() {
 
   // Reset badge when doctor visits the appointments page
   useEffect(() => {
-    if (location.pathname.startsWith("/admin/appointments")) {
-      setPendingBadge(0);
-    }
+    if (location.pathname.startsWith("/admin/appointments")) setPendingBadge(0);
+    if (location.pathname.startsWith("/admin/bookings")) setBookingBadge(0);
   }, [location.pathname]);
 
   const handleLogout = async () => {
@@ -104,6 +112,8 @@ export function AdminLayout() {
     { path: "/admin/calendar",     label: "Calendrier",         icon: Calendar },
     { path: "/admin/messages",     label: "Messages",           icon: MessageSquare },
     { path: "/admin/reviews",      label: "Avis",               icon: Star },
+    { path: "/admin/services",     label: "Prestations",        icon: Stethoscope },
+    { path: "/admin/bookings",     label: "Réservations",       icon: ClipboardList, badge: bookingBadge },
   ];
 
   return (

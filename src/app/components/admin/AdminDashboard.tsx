@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { Users, Calendar, MessageSquare, Star, TrendingUp, FileText, Image, CalendarCheck } from "lucide-react";
+import { Users, Calendar, MessageSquare, Star, TrendingUp, FileText, Image, CalendarCheck, Stethoscope, ClipboardList } from "lucide-react";
 import { supabase } from "../../../lib/supabase";
 import { PageLoader } from "../common/PageLoader";
 
@@ -138,6 +138,14 @@ export function AdminDashboard() {
             <Link to="/admin/gallery" className="p-4 border-2 border-yellow-600 text-yellow-600 rounded-lg hover:bg-yellow-50 transition-all text-center">
               <Star className="mx-auto mb-2" size={32} />
               <span className="block font-semibold text-sm">Galerie</span>
+            </Link>
+            <Link to="/admin/services" className="p-4 border-2 border-teal-700 text-teal-700 rounded-lg hover:bg-teal-50 transition-all text-center">
+              <Stethoscope className="mx-auto mb-2" size={32} />
+              <span className="block font-semibold text-sm">Prestations</span>
+            </Link>
+            <Link to="/admin/bookings" className="p-4 border-2 border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-all text-center">
+              <ClipboardList className="mx-auto mb-2" size={32} />
+              <span className="block font-semibold text-sm">Réservations</span>
             </Link>
           </div>
         </div>

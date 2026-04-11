@@ -79,3 +79,39 @@ export interface TeamMemberDB {
   is_active: boolean;
   created_at: string;
 }
+
+export interface Service {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ConsultationSchedule {
+  day_of_week: number; // 0=Dimanche … 6=Samedi (JS getDay())
+  start_time: string;  // "HH:MM:SS"
+  is_active: boolean;
+  updated_at: string;
+}
+
+export type BookingRequestStatus = "pending" | "validated" | "rejected";
+
+export interface BookingRequest {
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  email: string;
+  service_id: string | null;
+  service_name: string;
+  service_price: number | null;
+  payment_screenshot: string | null;
+  status: BookingRequestStatus;
+  assigned_date: string | null;   // "YYYY-MM-DD"
+  assigned_time: string | null;   // "HH:MM:SS"
+  rejection_reason: string | null;
+  created_at: string;
+}

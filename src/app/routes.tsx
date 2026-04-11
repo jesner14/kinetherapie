@@ -16,6 +16,8 @@ import { AdminCalendar } from "./components/admin/AdminCalendar";
 import { AdminMessages } from "./components/admin/AdminMessages";
 import { AdminReviews } from "./components/admin/AdminReviews";
 import { AdminAppointments } from "./components/admin/AdminAppointments";
+import { AdminServices } from "./components/admin/AdminServices";
+import { AdminBookingRequests } from "./components/admin/AdminBookingRequests";
 import { PatientDashboard } from "./components/patient/PatientDashboard";
 import { PatientBooking } from "./components/patient/PatientBooking";
 import { PatientMessages } from "./components/patient/PatientMessages";
@@ -49,6 +51,8 @@ export const router = createBrowserRouter([
       { path: "calendar", Component: AdminCalendar },
       { path: "messages", Component: AdminMessages },
       { path: "reviews", Component: AdminReviews },
+      { path: "services", Component: AdminServices },
+      { path: "bookings", Component: AdminBookingRequests },
       { path: "*", Component: NotFoundPage },
     ],
   },
