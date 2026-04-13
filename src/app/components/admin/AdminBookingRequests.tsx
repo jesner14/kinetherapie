@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   CalendarCheck, CheckCircle, XCircle, Eye, Loader2, ClipboardList,
-  Phone, Mail, User,
+  Phone, Mail, User, Send,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase, type BookingRequest, type ConsultationSchedule } from "../../../lib/supabase";
@@ -92,6 +92,9 @@ export function AdminBookingRequests() {
   const [rejectionReason, setRejectionReason] = useState("");
   const [rejecting, setRejecting] = useState(false);
 
+  // Resend email
+  const [resendingId, setResendingId] = useState<string | null>(null);
+
   // ── Fetch ────────────────────────────────────────────────────────────────
   const fetchData = async () => {
     setLoading(true);
@@ -151,27 +154,50 @@ export function AdminBookingRequests() {
       return;
     }
 
-    // Send confirmation email via Edge Function (non-blocking)
-    supabase.functions
-      .invoke("send-booking-confirmation", { body: { booking_request_id: confirmingReq.id } })
-      .then(({ error: fnErr }) => {
-        if (fnErr) toast.warning("Réservation validée mais l'email n'a pas pu être envoyé automatiquement.");
-      });
-
     toast.success(
       `Réservation validée — ${assignedDate ? formatDateFR(new Date(assignedDate + "T00:00:00"), assignedTime ?? "") : "sans date"}`
     );
 
+    // Send confirmation email via Edge Function (non-blocking)
+    supabase.functions
+      .invoke("send-booking-confirmation", { body: { booking_request_id: confirmingReq.id } })
+      .then(({ error: fnErr }) => {
+        if (fnErr) {
+          toast.warning("Réservation validée mais l'email n'a pas pu être envoyé. Utilisez le bouton \"Renvoyer l'email\".");
+        } else {
+          setRequests((prev) =>
+            prev.map((r) => r.id === confirmingReq.id ? { ...r, email_sent: true } : r)
+          );
+        }
+      });
+
     setRequests((prev) =>
       prev.map((r) =>
         r.id === confirmingReq.id
-          ? { ...r, status: "validated", assigned_date: assignedDate, assigned_time: assignedTime }
+          ? { ...r, status: "validated", assigned_date: assignedDate, assigned_time: assignedTime, email_sent: false }
           : r
       )
     );
 
     setConfirmingReq(null);
     setConfirming(false);
+  };
+
+  // ── Resend email ──────────────────────────────────────────────────────────
+  const handleResendEmail = async (req: BookingRequest) => {
+    setResendingId(req.id);
+    const { error: fnErr } = await supabase.functions.invoke("send-booking-confirmation", {
+      body: { booking_request_id: req.id },
+    });
+    if (fnErr) {
+      toast.error("L'email n'a pas pu être envoyé. Vérifiez la configuration de l'Edge Function.");
+    } else {
+      toast.success(`Email renvoyé à ${req.email}`);
+      setRequests((prev) =>
+        prev.map((r) => r.id === req.id ? { ...r, email_sent: true } : r)
+      );
+    }
+    setResendingId(null);
   };
 
   // ── Reject ────────────────────────────────────────────────────────────────
@@ -308,6 +334,17 @@ export function AdminBookingRequests() {
                     </div>
                   )}
 
+                  {req.status === "validated" && (
+                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                      req.email_sent
+                        ? "bg-blue-50 text-blue-600 border-blue-200"
+                        : "bg-orange-50 text-orange-600 border-orange-200"
+                    }`}>
+                      <Mail size={11} />
+                      {req.email_sent ? "Email envoyé" : "Email non envoyé"}
+                    </div>
+                  )}
+
                   {req.status === "rejected" && req.rejection_reason && (
                     <p className="text-sm text-red-500 bg-red-50 px-3 py-1.5 rounded-xl border border-red-100">
                       Motif : {req.rejection_reason}
@@ -344,6 +381,19 @@ export function AdminBookingRequests() {
                         Refuser
                       </button>
                     </>
+                  )}
+
+                  {req.status === "validated" && !req.email_sent && (
+                    <button
+                      onClick={() => handleResendEmail(req)}
+                      disabled={resendingId === req.id}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold text-orange-600 border border-orange-300 rounded-xl hover:bg-orange-50 transition-all disabled:opacity-60"
+                    >
+                      {resendingId === req.id
+                        ? <Loader2 size={13} className="animate-spin" />
+                        : <Send size={13} />}
+                      Renvoyer l'email
+                    </button>
                   )}
                 </div>
               </div>

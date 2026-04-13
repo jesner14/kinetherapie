@@ -214,10 +214,17 @@ create table if not exists public.gallery_photos (
   id            uuid primary key default gen_random_uuid(),
   title         text not null,
   description   text,
-  image_base64  text,                        -- image en base64 ou URL
+  image_base64  text,                        -- legacy : image en base64 ou URL directe
+  image_url     text,                        -- URL Supabase Storage (nouveau)
+  media_type    text not null default 'image' check (media_type in ('image', 'video')),
   is_published  boolean not null default false,
   created_at    timestamptz default now()
 );
+
+-- Migration pour les bases déjà existantes (sans erreur si colonne déjà présente)
+alter table public.gallery_photos add column if not exists image_url   text;
+alter table public.gallery_photos add column if not exists media_type  text not null default 'image'
+  check (media_type in ('image', 'video'));
 
 alter table public.gallery_photos enable row level security;
 

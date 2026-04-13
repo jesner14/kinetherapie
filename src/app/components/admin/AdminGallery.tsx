@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { ImagePlus, Trash2, Loader2, AlertCircle, Upload } from "lucide-react";
+﻿import { useEffect, useRef, useState } from "react";
+import { ImagePlus, Trash2, Loader2, AlertCircle, Upload, Film } from "lucide-react";
 import { supabase, type GalleryPhoto } from "../../../lib/supabase";
 import { toast } from "sonner";
 import { PageLoader } from "../common/PageLoader";
+
+const BUCKET = "gallery1";
 
 export function AdminGallery() {
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
@@ -15,8 +17,10 @@ export function AdminGallery() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    image_base64: "",
     isPublished: true,
+    file: null as File | null,
+    preview: "",
+    mediaType: "image" as "image" | "video",
   });
 
   const fetchPhotos = async () => {
@@ -47,53 +51,98 @@ export function AdminGallery() {
     fetchPhotos();
   }, []);
 
-  const handleImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      toast.warning("Image trop lourde (max 2 Mo recommandé). Elle sera tout de même chargée.");
+
+    const isVideo = file.type.startsWith("video/");
+    const isImage = file.type.startsWith("image/");
+
+    if (!isVideo && !isImage) {
+      toast.error("Format non supporté. Choisissez une image ou une vidéo.");
+      return;
     }
-    const reader = new FileReader();
-    reader.onload = () => setForm((f) => ({ ...f, image_base64: reader.result as string }));
-    reader.readAsDataURL(file);
+
+    if (isVideo && file.size > 100 * 1024 * 1024) {
+      toast.error("Vidéo trop lourde (max 100 Mo).");
+      return;
+    }
+    if (isImage && file.size > 10 * 1024 * 1024) {
+      toast.warning("Image lourde (max recommandé : 10 Mo).");
+    }
+
+    const preview = isImage ? URL.createObjectURL(file) : "";
+    setForm((f) => ({ ...f, file, preview, mediaType: isVideo ? "video" : "image" }));
   };
 
   const handleAddPhoto = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.title.trim() || !form.image_base64) return;
+    if (!form.title.trim() || !form.file) return;
 
     setSubmitting(true);
     setError(null);
 
-    const { error } = await supabase.from("gallery_photos").insert({
+    // Upload vers Storage
+    const ext = form.file.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error: uploadErr } = await supabase.storage
+      .from(BUCKET)
+      .upload(fileName, form.file, { contentType: form.file.type, upsert: false });
+
+    if (uploadErr) {
+      setError(`Erreur upload : ${uploadErr.message}`);
+      setSubmitting(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(fileName);
+    const publicUrl = urlData.publicUrl;
+
+    const { error: dbErr } = await supabase.from("gallery_photos").insert({
       title: form.title.trim(),
       description: form.description.trim() || null,
-      image_base64: form.image_base64,
+      image_url: publicUrl,
+      image_base64: null,
+      media_type: form.mediaType,
       is_published: form.isPublished,
     });
 
     setSubmitting(false);
 
-    if (error) {
-      setError(error.message);
+    if (dbErr) {
+      // Nettoyage du fichier uploadé si l'insert échoue
+      await supabase.storage.from(BUCKET).remove([fileName]);
+      setError(dbErr.message);
       return;
     }
 
-    toast.success("Photo ajoutée !");
-    setForm({ title: "", description: "", image_base64: "", isPublished: true });
+    toast.success(form.mediaType === "video" ? "Vidéo ajoutée !" : "Photo ajoutée !");
+    setForm({ title: "", description: "", isPublished: true, file: null, preview: "", mediaType: "image" });
+    if (fileRef.current) fileRef.current.value = "";
     fetchPhotos();
   };
 
-  const handleDeletePhoto = async (id: string) => {
-    if (!confirm("Supprimer cette photo ?")) return;
-    const { error } = await supabase.from("gallery_photos").delete().eq("id", id);
+  const handleDeletePhoto = async (photo: GalleryPhoto) => {
+    if (!confirm(`Supprimer "${photo.title}" ?`)) return;
+
+    // Supprimer le fichier du bucket si image_url présente
+    if (photo.image_url) {
+      const fileName = photo.image_url.split("/").pop();
+      if (fileName) await supabase.storage.from(BUCKET).remove([fileName]);
+    }
+
+    const { error } = await supabase.from("gallery_photos").delete().eq("id", photo.id);
     if (error) {
       setError(error.message);
       return;
     }
-    setPhotos((prev) => prev.filter((p) => p.id !== id));
-    toast.success("Photo supprimée.");
+    setPhotos((prev) => prev.filter((p) => p.id !== photo.id));
+    toast.success("Supprimé.");
   };
+
+  // Résout l'URL à afficher (nouveau Storage ou ancien base64)
+  const resolveUrl = (photo: GalleryPhoto) => photo.image_url ?? photo.image_base64 ?? "";
 
   if (loading) return <PageLoader text="Chargement de la galerie..." />;
 
@@ -101,7 +150,7 @@ export function AdminGallery() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestion de la Galerie</h1>
-        <p className="text-gray-600">Ajoutez des photos de réalisations visibles sur l'onglet Galerie du site.</p>
+        <p className="text-gray-600">Ajoutez des photos et vidéos visibles sur l'onglet Galerie du site.</p>
       </div>
 
       {missingTable && (
@@ -116,9 +165,10 @@ export function AdminGallery() {
         </div>
       )}
 
+      {/* ── Formulaire ajout ── */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <ImagePlus size={18} className="text-brand-600" /> Ajouter une photo
+          <ImagePlus size={18} className="text-brand-600" /> Ajouter une photo ou vidéo
         </h2>
 
         <form onSubmit={handleAddPhoto} className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -135,21 +185,43 @@ export function AdminGallery() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Image * (JPG, PNG, WebP)</label>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageFile} />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Fichier * <span className="text-gray-400 font-normal">(image JPG/PNG/WebP ou vidéo MP4/MOV)</span>
+            </label>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*,video/*,.mp4,.webm,.mov,.avi,.mkv,.ogv"
+              className="hidden"
+              onChange={handleFileSelect}
+            />
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
               className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 hover:border-brand-400 text-gray-600 hover:text-brand-700 px-3 py-2 rounded-lg text-sm transition-colors"
             >
-              <Upload size={15} />
-              {form.image_base64 ? "Image sélectionnée ✓" : "Choisir un fichier"}
+              {form.mediaType === "video" ? <Film size={15} /> : <Upload size={15} />}
+              {form.file
+                ? `${form.mediaType === "video" ? "🎥" : "🖼️"} ${form.file.name}`
+                : "Choisir un fichier"}
             </button>
           </div>
 
-          {form.image_base64 && (
+          {/* Prévisualisation image */}
+          {form.preview && form.mediaType === "image" && (
             <div className="md:col-span-2">
-              <img src={form.image_base64} alt="preview" className="h-40 rounded-lg object-cover border border-gray-200" />
+              <img src={form.preview} alt="preview" className="h-40 rounded-lg object-cover border border-gray-200" />
+            </div>
+          )}
+
+          {/* Prévisualisation vidéo */}
+          {form.file && form.mediaType === "video" && (
+            <div className="md:col-span-2">
+              <video
+                src={URL.createObjectURL(form.file)}
+                controls
+                className="h-40 rounded-lg border border-gray-200 bg-black"
+              />
             </div>
           )}
 
@@ -172,57 +244,63 @@ export function AdminGallery() {
                 onChange={(e) => setForm({ ...form, isPublished: e.target.checked })}
                 className="rounded border-gray-300 accent-brand-600"
               />
-              Publiée sur le site
+              Publié sur le site
             </label>
 
             <button
               type="submit"
-              disabled={submitting || !form.image_base64}
+              disabled={submitting || !form.file}
               className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 disabled:bg-brand-400 text-white px-4 py-2 rounded-lg text-sm font-medium"
             >
-              {submitting && <Loader2 size={14} className="animate-spin" />} Ajouter
+              {submitting && <Loader2 size={14} className="animate-spin" />}
+              {submitting ? "Upload en cours…" : "Ajouter"}
             </button>
           </div>
         </form>
       </div>
 
+      {/* ── Liste des médias ── */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Photos existantes</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Médias existants</h2>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
-                <div className="w-full h-44 bg-gray-200 animate-pulse" />
-                <div className="p-4 space-y-2">
-                  <div className="h-4 bg-gray-200 animate-pulse rounded w-2/3" />
-                  <div className="h-3 bg-gray-100 animate-pulse rounded w-full" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : photos.length === 0 ? (
-          <p className="text-gray-500">Aucune photo ajoutée.</p>
+        {photos.length === 0 ? (
+          <p className="text-gray-500">Aucun média ajouté.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {photos.map((photo) => (
               <article key={photo.id} className="rounded-xl border border-gray-200 overflow-hidden bg-white">
-                <img
-                  src={photo.image_base64 ?? ""}
-                  alt={photo.title}
-                  className="w-full h-44 object-cover"
-                  onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/400x176?text=Image"; }}
-                />
+                <div className="w-full h-44 bg-gray-100 relative">
+                  {photo.media_type === "video" ? (
+                    <video
+                      src={resolveUrl(photo)}
+                      className="w-full h-full object-cover"
+                      muted
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img
+                      src={resolveUrl(photo)}
+                      alt={photo.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/400x176?text=Image"; }}
+                    />
+                  )}
+                  {photo.media_type === "video" && (
+                    <span className="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <Film size={11} /> Vidéo
+                    </span>
+                  )}
+                </div>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className="font-semibold text-gray-900 text-sm">{photo.title}</h3>
                     <span className={`text-[10px] px-2 py-1 rounded-full ${photo.is_published ? "bg-brand-100 text-brand-700" : "bg-gray-100 text-gray-600"}`}>
-                      {photo.is_published ? "Publiée" : "Brouillon"}
+                      {photo.is_published ? "Publié" : "Brouillon"}
                     </span>
                   </div>
                   {photo.description && <p className="text-xs text-gray-600 mb-3">{photo.description}</p>}
                   <button
-                    onClick={() => handleDeletePhoto(photo.id)}
+                    onClick={() => handleDeletePhoto(photo)}
                     className="inline-flex items-center gap-1.5 text-red-600 hover:text-red-700 text-xs font-medium"
                   >
                     <Trash2 size={14} /> Supprimer
@@ -236,3 +314,4 @@ export function AdminGallery() {
     </div>
   );
 }
+

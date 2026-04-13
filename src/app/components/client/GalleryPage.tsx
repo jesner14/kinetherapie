@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, Image as ImageIcon, Sparkles } from "lucide-react";
+import { X, Image as ImageIcon, Sparkles, Film } from "lucide-react";
 import { supabase, type GalleryPhoto } from "../../../lib/supabase";
 import { PageLoader } from "../common/PageLoader";
 
@@ -30,6 +30,9 @@ export function GalleryPage() {
 
     fetchPhotos();
   }, []);
+
+  // Résout l'URL à afficher (nouveau Storage ou ancien base64)
+  const resolveUrl = (photo: GalleryPhoto) => photo.image_url ?? photo.image_base64 ?? "";
 
   if (loading) return <PageLoader text="Chargement de la galerie..." />;
 
@@ -66,8 +69,29 @@ export function GalleryPage() {
                   onClick={() => setSelected(photo)}
                   className="text-left rounded-xl overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all"
                 >
-                  <div className="aspect-[4/3] overflow-hidden bg-gray-100">
-                    <img src={photo.image_base64 ?? ""} alt={photo.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
+                  <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                    {photo.media_type === "video" ? (
+                      <>
+                        <video
+                          src={resolveUrl(photo)}
+                          className="w-full h-full object-cover"
+                          muted
+                          preload="metadata"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center">
+                            <Film size={18} className="text-gray-800" />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <img
+                        src={resolveUrl(photo)}
+                        alt={photo.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                      />
+                    )}
                   </div>
                   <div className="p-2">
                     <h3 className="font-semibold text-gray-900 text-sm truncate">{photo.title}</h3>
@@ -80,20 +104,44 @@ export function GalleryPage() {
         </div>
       </section>
 
+      {/* ── Lightbox ── */}
       {selected && (
-        <div className="fixed inset-0 bg-black/70 z-50 p-4 flex items-center justify-center" onClick={() => setSelected(null)}>
-          <div className="w-full max-w-4xl bg-white rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/80 z-50 p-4 flex items-center justify-center"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="w-full max-w-4xl bg-white rounded-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between p-4 border-b">
               <h3 className="font-bold text-gray-900">{selected.title}</h3>
               <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
               </button>
             </div>
-            <img src={selected.image_base64 ?? ""} alt={selected.title} className="w-full max-h-[75vh] object-contain bg-gray-100" />
-            {selected.description && <p className="p-4 text-sm text-gray-600">{selected.description}</p>}
+            {selected.media_type === "video" ? (
+              <video
+                src={resolveUrl(selected)}
+                controls
+                autoPlay
+                className="w-full max-h-[75vh] bg-black"
+              />
+            ) : (
+              <img
+                src={resolveUrl(selected)}
+                alt={selected.title}
+                className="w-full max-h-[75vh] object-contain bg-gray-100"
+              />
+            )}
+            {selected.description && (
+              <p className="p-4 text-sm text-gray-600">{selected.description}</p>
+            )}
           </div>
         </div>
       )}
     </div>
   );
 }
+
+

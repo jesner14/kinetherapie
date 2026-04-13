@@ -50,7 +50,9 @@ export interface GalleryPhoto {
   id: string;
   title: string;
   description: string | null;
-  image_base64: string | null;
+  image_base64: string | null;  // legacy — conservé pour compatibilité
+  image_url: string | null;     // nouveau — URL Supabase Storage
+  media_type: "image" | "video";
   created_at: string;
   is_published: boolean;
 }
@@ -113,5 +115,6 @@ export interface BookingRequest {
   assigned_date: string | null;   // "YYYY-MM-DD"
   assigned_time: string | null;   // "HH:MM:SS"
   rejection_reason: string | null;
+  email_sent: boolean;
   created_at: string;
 }
