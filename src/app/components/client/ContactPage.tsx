@@ -28,6 +28,18 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 
+// ── Wave URL builder (handles existing params safely) ──────────────────────
+function buildWaveUrl(baseLink: string | null, price: number | null | undefined): string | null {
+  if (!baseLink) return null;
+  try {
+    const url = new URL(baseLink);
+    if (price != null) url.searchParams.set("amount", String(price));
+    return url.toString();
+  } catch {
+    return baseLink;
+  }
+}
+
 // ── Self-contained booking form (owns its own state) ─────────────────────
 interface BookingFormBodyProps {
   selectedService: Service | null;
@@ -135,7 +147,7 @@ function BookingFormBody({ selectedService, waveBaseLink, onClose }: BookingForm
         )}
         {waveBaseLink ? (
           <a
-            href={`${waveBaseLink}${selectedService?.price != null ? `?amount=${selectedService.price}` : ""}`}
+            href={buildWaveUrl(waveBaseLink, selectedService?.price) ?? "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-brand-600 text-white px-5 py-4 rounded-2xl font-bold text-base active:scale-95 transition-all"
@@ -548,8 +560,8 @@ export function ContactPage() {
       {/* ── Booking modal: Drawer on mobile, Dialog on desktop ─────────── */}
       {isMobile ? (
         <Drawer open={showBookingDialog} onOpenChange={(o) => { if (!o) closeBookingDialog(); }} direction="bottom">
-          <DrawerContent className="max-h-[94svh]">
-            <div className="overflow-y-auto overscroll-contain px-5 pb-10">
+          <DrawerContent className="max-h-[94svh] flex flex-col">
+            <div className="flex-1 min-h-0 overflow-y-scroll overscroll-contain px-5 pb-10">
               <DrawerHeader className="px-0 pb-3 pt-1">
                 <DrawerTitle className="text-lg font-bold text-gray-900">
                   {`Réserver — ${selectedService?.name ?? ""}`}
