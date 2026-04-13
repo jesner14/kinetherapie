@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
 import { Lock, Mail, User, AlertCircle, Loader2, CheckCircle } from "lucide-react";
 import { useAuth } from "../../../lib/AuthContext";
+import { useLogo } from "../../../lib/hooks/useLogo";
 
 export function RegisterPage() {
   const navigate = useNavigate();
   const { signUp, profile, loading: authLoading } = useAuth();
+  const logoUrl = useLogo();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -74,8 +76,8 @@ export function RegisterPage() {
       <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
         {/* Logo */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 bg-brand-600 rounded-full flex items-center justify-center mx-auto mb-3">
-            <span className="text-white text-2xl font-bold">K</span>
+          <div className="w-20 h-20 rounded-2xl overflow-hidden mx-auto mb-3 bg-white">
+            <img src={logoUrl} alt="Kiné Excellence" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-xl font-bold text-gray-900">Kiné Excellence</h1>
           <p className="text-sm text-gray-500 mt-0.5">Créer un compte patient</p>

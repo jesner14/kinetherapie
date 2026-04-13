@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { Menu, X } from "lucide-react";
 import { useSiteContent } from "../../../lib/hooks/useSiteContent";
+import { useLogo } from "../../../lib/hooks/useLogo";
 
 const FOOTER_SOCIAL_PLATFORMS = [
   {
@@ -43,6 +44,7 @@ const FOOTER_SOCIAL_PLATFORMS = [
 
 export function ClientLayout() {
   const location = useLocation();
+  const logoUrl = useLogo();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -96,8 +98,8 @@ export function ClientLayout() {
         <div className="max-w-6xl mx-auto px-6 py-3.5">
           <div className="flex justify-between items-center">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-brand-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-brand-200 transition-shadow">
-                <span className="text-white text-lg font-black">K</span>
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:shadow-brand-200 transition-shadow bg-white">
+                <img src={logoUrl} alt="Kiné Excellence" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900 leading-tight">Kiné Excellence</h1>
@@ -182,8 +184,8 @@ export function ClientLayout() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 bg-gradient-to-br from-teal-500 to-brand-500 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-black">K</span>
+                <div className="w-9 h-9 rounded-xl overflow-hidden bg-white">
+                  <img src={logoUrl} alt="Kiné Excellence" className="w-full h-full object-contain" />
                 </div>
                 <span className="text-lg font-bold">{footer["footer.brand.name"]}</span>
               </div>

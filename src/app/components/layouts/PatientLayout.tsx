@@ -7,6 +7,7 @@ import {
   Star,
 } from "lucide-react";
 import { useAuth } from "../../../lib/AuthContext";
+import { useLogo } from "../../../lib/hooks/useLogo";
 
 export function PatientLayout() {
   const location = useLocation();
@@ -24,6 +25,8 @@ export function PatientLayout() {
     { path: "/patient/messages", label: "Messages", icon: MessageSquare },
   ];
 
+  const logoUrl = useLogo();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -31,8 +34,8 @@ export function PatientLayout() {
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                <span className="text-brand-600 text-2xl font-bold">K</span>
+              <div className="w-12 h-12 bg-white rounded-full overflow-hidden p-0.5">
+                <img src={logoUrl} alt="Kiné Excellence" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Espace Patient</h1>

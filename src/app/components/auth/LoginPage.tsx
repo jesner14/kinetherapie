@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router";
 import { Lock, Mail, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "../../../lib/AuthContext";
+import { useLogo } from "../../../lib/hooks/useLogo";
 
 export function LoginPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { signIn, profile, loading: authLoading } = useAuth();
   const role = searchParams.get("role") || "patient";
+  const logoUrl = useLogo();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,8 +54,8 @@ export function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-brand-50 to-brand-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 shadow-2xl p-7">
         <div className="text-center mb-7">
-          <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-brand-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-brand-200">
-            <span className="text-white text-2xl font-black">K</span>
+          <div className="w-20 h-20 rounded-2xl overflow-hidden mx-auto mb-3 shadow-lg shadow-brand-200 bg-white">
+            <img src={logoUrl} alt="Kiné Excellence" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-2xl font-black text-gray-900">Kine Excellence</h1>
           <p className="text-xs text-brand-700 mt-1 font-semibold uppercase tracking-[0.18em]">

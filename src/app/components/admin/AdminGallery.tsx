@@ -275,7 +275,10 @@ export function AdminGallery() {
                       src={resolveUrl(photo)}
                       className="w-full h-full object-cover"
                       muted
-                      preload="metadata"
+                      autoPlay
+                      playsInline
+                      loop
+                      preload="auto"
                     />
                   ) : (
                     <img

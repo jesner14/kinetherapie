@@ -526,6 +526,7 @@ insert into public.site_content (id, page, section, key, value, type, label) val
 -- GLOBAL
 ('global.cabinet_name',          'global', 'brand', 'cabinet_name', 'Kiné Excellence',                                                                               'text',     'Nom du cabinet'),
 ('global.tagline',               'global', 'brand', 'tagline',      'Kinésithérapie Premium',                                                                        'text',     'Slogan du cabinet'),
+('global.logo_url',              'global', 'brand', 'logo_url',     '',                                                                                              'image',    'Logo du cabinet'),
 -- FOOTER
 ('footer.brand.name',            'footer', 'brand', 'name',         'Kiné Excellence',                                                                               'text',     'Footer — Nom du cabinet'),
 ('footer.brand.description',     'footer', 'brand', 'description',  'Centre de kinésithérapie moderne offrant des soins personnalisés et de qualité depuis 2010.',    'textarea', 'Footer — Description'),

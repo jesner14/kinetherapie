@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useAllSiteContent } from "../../../lib/hooks/useSiteContent";
 import { useTeamMembers } from "../../../lib/hooks/useTeamMembers";
+import { uploadLogo, useLogo } from "../../../lib/hooks/useLogo";
 import { TeamMemberDB } from "../../../lib/supabase";
 import { toast } from "sonner";
 import { PageLoader } from "../common/PageLoader";
@@ -138,6 +139,56 @@ function EditField({ id, value, type, label, onSave }: EditFieldProps) {
           <Pencil size={15} />
         </button>
       )}
+    </div>
+  );
+}
+
+// ─── Logo upload card ──────────────────────────────────────────────────────
+
+function LogoUploadCard() {
+  const logoUrl = useLogo();
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Seules les images sont acceptées.");
+      return;
+    }
+    setUploading(true);
+    const { error } = await uploadLogo(file);
+    setUploading(false);
+    if (error) toast.error(`Erreur upload logo : ${error}`);
+    else toast.success("Logo mis à jour sur tout le site !");
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center gap-6">
+      <div className="w-20 h-20 rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex-shrink-0">
+        {logoUrl && logoUrl !== "/logo.png" ? (
+          <img src={logoUrl} alt="Logo actuel" className="w-full h-full object-contain" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-300">
+            <ImageIcon size={32} />
+          </div>
+        )}
+      </div>
+      <div className="flex-1">
+        <p className="font-semibold text-gray-900 mb-0.5">Logo du cabinet</p>
+        <p className="text-xs text-gray-500 mb-3">Affiché dans la navbar, le footer, les pages de connexion et l'espace patient. Format recommandé : carré PNG/WebP fond transparent.</p>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+        <button
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 disabled:bg-brand-400 text-white px-4 py-2 rounded-lg text-sm font-medium"
+        >
+          {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+          {uploading ? "Upload en cours…" : "Changer le logo"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -552,7 +603,8 @@ export function AdminContent() {
         <p className="text-gray-500 text-sm">Cliquez sur le crayon ✏️ à côté de n'importe quel élément pour le modifier. Les changements sont sauvegardés en temps réel.</p>
       </div>
 
-      {/* ── Tabs ── */}
+      {/* ── Logo ── */}
+      <LogoUploadCard />
       <div className="flex gap-1 bg-gray-100 rounded-xl p-1 w-fit">
         {TABS.map((tab) => {
           const Icon = tab.icon;

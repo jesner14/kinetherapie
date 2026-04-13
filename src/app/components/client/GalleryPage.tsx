@@ -69,20 +69,21 @@ export function GalleryPage() {
                   onClick={() => setSelected(photo)}
                   className="text-left rounded-xl overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all"
                 >
-                  <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                  <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative group">
                     {photo.media_type === "video" ? (
                       <>
                         <video
                           src={resolveUrl(photo)}
                           className="w-full h-full object-cover"
                           muted
-                          preload="metadata"
+                          autoPlay
+                          playsInline
+                          loop
+                          preload="auto"
                         />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                          <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center">
-                            <Film size={18} className="text-gray-800" />
-                          </div>
-                        </div>
+                        <span className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 pointer-events-none">
+                          <Film size={10} /> Vidéo
+                        </span>
                       </>
                     ) : (
                       <img

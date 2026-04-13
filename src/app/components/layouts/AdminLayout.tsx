@@ -15,12 +15,14 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../../lib/AuthContext";
 import { supabase } from "../../../lib/supabase";
+import { useLogo } from "../../../lib/hooks/useLogo";
 import { toast } from "sonner";
 
 export function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut, profile, user } = useAuth();
+  const logoUrl = useLogo();
 
   // Badge: count of new pending appointments not yet seen by doctor
   const [pendingBadge, setPendingBadge] = useState(0);
@@ -120,9 +122,14 @@ export function AdminLayout() {
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
       <aside className="w-64 bg-brand-700 text-white flex flex-col">
-        <div className="p-4 border-b border-brand-600">
-          <h1 className="text-lg font-bold">Admin Panel</h1>
-          <p className="text-brand-200 text-xs mt-0.5">Kiné Excellence</p>
+        <div className="p-4 border-b border-brand-600 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg overflow-hidden bg-white shrink-0">
+            <img src={logoUrl} alt="Kiné Excellence" className="w-full h-full object-contain" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold leading-tight">Admin Panel</h1>
+            <p className="text-brand-200 text-xs mt-0.5">Kiné Excellence</p>
+          </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-2">
