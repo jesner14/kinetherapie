@@ -99,6 +99,16 @@ export interface ConsultationSchedule {
   updated_at: string;
 }
 
+export interface Review {
+  id: string;
+  patient_name: string;
+  rating: number;          // 1–5
+  comment: string;
+  review_date: string;     // "YYYY-MM-DD"
+  is_visible: boolean;
+  created_at: string;
+}
+
 export type BookingRequestStatus = "pending" | "validated" | "rejected";
 
 export interface BookingRequest {

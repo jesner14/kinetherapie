@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Star, Calendar, CheckCircle2, Heart, Sparkles, Activity, ArrowRight } from "lucide-react";
-import { mockReviews } from "../../data/mockData";
 import { Link } from "react-router";
 import { useSiteContent } from "../../../lib/hooks/useSiteContent";
 import { PageLoader } from "../common/PageLoader";
+import { supabase, type Review } from "../../../lib/supabase";
 
 const DEFAULTS: Record<string, string> = {
   "home.hero.slide1.title":        "Kiné Excellence — Votre Récupération, Notre Priorité",
@@ -46,6 +47,16 @@ const DEFAULTS: Record<string, string> = {
 export function HomePage() {
   const { content, loading } = useSiteContent("home", DEFAULTS);
   const c = (key: string) => content[key] ?? DEFAULTS[key] ?? "";
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("reviews")
+      .select("*")
+      .eq("is_visible", true)
+      .order("review_date", { ascending: false })
+      .then(({ data }) => setReviews(data ?? []));
+  }, []);
 
   if (loading) return <PageLoader text="Chargement de la page..." />;
 
@@ -175,26 +186,28 @@ export function HomePage() {
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">Ce Que Disent Nos Patients</h2>
             <p className="text-gray-600">Des resultats concrets, une relation de confiance durable.</p>
           </div>
-          <Slider {...reviewSettings}>
-            {mockReviews.map((review) => (
-              <div key={review.id} className="px-2">
-                <div className="h-full rounded-2xl bg-white border border-gray-200 p-6 shadow-md hover:shadow-xl transition-shadow">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={16} className={i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 text-sm leading-relaxed italic mb-5">"{review.comment}"</p>
-                  <div className="pt-4 border-t border-gray-100">
-                    <p className="font-semibold text-gray-900">{review.patientName}</p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(review.date).toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" })}
-                    </p>
+          {reviews.length > 0 ? (
+            <Slider {...reviewSettings}>
+              {reviews.map((review) => (
+                <div key={review.id} className="px-2">
+                  <div className="h-full rounded-2xl bg-white border border-gray-200 p-6 shadow-md hover:shadow-xl transition-shadow">
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={16} className={i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} />
+                      ))}
+                    </div>
+                    <p className="text-gray-700 text-sm leading-relaxed italic mb-5">"{review.comment}"</p>
+                    <div className="pt-4 border-t border-gray-100">
+                      <p className="font-semibold text-gray-900">{review.patient_name}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(review.review_date).toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" })}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          ) : null}
         </div>
       </section>
 

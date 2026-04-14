@@ -579,4 +579,49 @@ insert into public.team_members (name, title, specialty, bio, photo_base64, orde
   3,
   true
 )
+;
+
+-- ─────────────────────────────────────────
+-- 15. AVIS PATIENTS
+-- ─────────────────────────────────────────
+create table if not exists public.reviews (
+  id            uuid primary key default gen_random_uuid(),
+  patient_name  text not null,
+  rating        integer not null check (rating between 1 and 5),
+  comment       text not null default '',
+  review_date   date not null default current_date,
+  is_visible    boolean not null default true,
+  created_at    timestamptz default now()
+);
+
+alter table public.reviews enable row level security;
+
+-- Lecture publique : seuls les avis visibles sont lisibles côté client
+create policy "reviews readable by all (visible only)"
+  on public.reviews for select
+  using (is_visible = true);
+
+-- Les médecins peuvent lire tous les avis (y compris masqués)
+create policy "reviews readable by doctors"
+  on public.reviews for select to authenticated
+  using (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  );
+
+-- Les médecins peuvent créer / modifier / supprimer des avis
+create policy "reviews writable by doctors"
+  on public.reviews for all to authenticated
+  using (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  )
+  with check (
+    exists (select 1 from public.profiles where id = auth.uid() and role = 'doctor')
+  );
+
+-- SEED : avis initiaux
+insert into public.reviews (patient_name, rating, comment, review_date, is_visible) values
+('Marie Dupont',   5, 'Excellent professionnel ! J''ai retrouvé ma mobilité après seulement quelques séances. Je recommande vivement.', '2026-03-15', true),
+('Jean Martin',    5, 'Très compétent et à l''écoute. Le cabinet est moderne et bien équipé.',                                          '2026-03-10', true),
+('Sophie Bernard', 4, 'Bon suivi et conseils personnalisés. Merci pour votre professionnalisme.',                                        '2026-03-05', true)
+on conflict do nothing;
 on conflict do nothing;
